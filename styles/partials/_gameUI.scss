@@ -1,0 +1,83 @@
+// Playground
+main {
+	height: 100vh;
+	overflow: hidden;
+	position: relative;
+	width: 100vw;
+}
+
+#bottom-bar {
+  align-items: center;
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+  left: 50%;
+  opacity: 0;
+	padding: 20px 0;
+	position: fixed;
+	transform: translateX(-50%);
+  user-select: none;
+}
+
+// Each falling word
+.word {
+	background: rgba(black, .1);
+	border-radius: 500px;
+	color: $secondColor;
+	font-family: inherit;
+  font-size: inherit;
+	margin: 0;
+	padding: 15px;
+	position: absolute;
+	text-align: center;
+	text-transform: uppercase;
+	transform: translate(-50%);
+	user-select: none;
+}
+
+// Label for score (above input)
+#score-label {	
+	font-size: 1em;
+	color: $secondColor;
+	margin-bottom: 10px;
+}
+
+// Main input
+#input {
+  background: none;
+	border: 4px solid;
+	border-color: rgba($secondColor, .6);
+  color: $secondColor;
+  font-family: inherit;
+	font-size: inherit;
+	height: 35px;
+	padding: 5px 25px;
+	text-align: center;
+  text-transform: uppercase;
+  transition: .2s;
+  width: 300px;
+	
+	&:hover {
+		background: rgba($secondColor, .1);
+    border-color: rgba($secondColor, .8);
+    transition: .2s;
+	}
+  
+  // No word matches the input value
+	&.invalid {
+		animation: error .2s ease;
+	}
+}
+
+// Error animation
+@keyframes error {
+	25% {
+		transform: translateX(-5%);
+	}
+	75% {
+		transform: translateX(5%);
+	}
+	100% {
+		transform: unset;
+	}
+}

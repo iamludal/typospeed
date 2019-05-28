@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <title>Typospeed</title>
+
+  <link rel="stylesheet" type="text/css" href="styles/style.css">
+  <link href="https://fonts.googleapis.com/css?family=Montserrat:400,500&display=swap" rel="stylesheet">
+
+  <script src="data/wordsData.js" defer></script>
+  <script src="scripts/jquery.js" defer></script>
+  <script src="scripts/main.js" defer></script>
+</head>
+
+<body>
+
+  <!-- GAME UI -->
+  <div id="game-ui">
+    <!-- Playground -->
+    <main id="playground">
+    </main>
+
+    <!-- Bottom bar (input + score) -->
+    <div id="bottom-bar">
+      <div id="score-label">Score: <span>0</span></div>
+      <input type="text" spellcheck="false" autocapitalize="characters" id="input">
+    </div>
+  </div>
+
+  <!-- Start menu -->
+  <div id="menu">
+    <div id="scores">
+      <div id="high-score">Highest score: <span></span></div>
+      <div id="prev-score">Previous score: <span></span></div>
+    </div>
+
+    <button id="play-btn">PLAY</button>
+  </div>
+
+  <!-- End screen -->
+  <div id="end-screen">
+
+  </div>
+
+</body>
+
+</html>

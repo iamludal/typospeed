@@ -1,0 +1,50 @@
+#menu {
+	display: none;
+}
+
+// When menu disappears
+#menu.fadeOut {
+	#scores {
+		transform: translateY(-100%);
+		transition: $fadeOutDuration;
+	}
+
+	#play-btn {
+		transform: translate(-50%, -50%) scale(10);
+		opacity: 0;
+		transition: $fadeOutDuration;
+	}
+}
+
+// Top left scores panel
+#scores {
+	color: $secondColor;
+	display: flex;
+  flex-direction: column;
+  padding: 20px;
+	position: absolute;
+  top: 0;
+}
+
+// Play button
+#play-btn {
+	background: rgba(black, .1);
+	border: none;
+	border-radius: 50%;
+  color: $secondColor;
+  font-size: 1.1em;
+  height: 100px;
+	left: 50%;
+	position: fixed;
+	top: 50%;
+	transform: translate(-50%, -50%) scale(1);
+  transition: .4s;
+	width: 100px;
+  
+  &:hover {
+    box-shadow: 0 0 8px rgba(black, .4);
+    transform: translate(-50%, -50%) scale(1.1);
+    transition: .4s;
+  }
+}
+
