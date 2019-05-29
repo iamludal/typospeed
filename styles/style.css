@@ -32,25 +32,23 @@
 }
 
 #play-btn {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  -webkit-transform: translate(-50%, -50%);
+          transform: translate(-50%, -50%);
   background: rgba(0, 0, 0, 0.1);
   border: none;
   border-radius: 50%;
   color: white;
   font-size: 1.1em;
   height: 100px;
-  left: 50%;
-  position: fixed;
-  top: 50%;
-  -webkit-transform: translate(-50%, -50%) scale(1);
-          transform: translate(-50%, -50%) scale(1);
   -webkit-transition: .4s;
   transition: .4s;
   width: 100px;
 }
 
 #play-btn:hover {
-  -webkit-box-shadow: 0 0 8px rgba(0, 0, 0, 0.4);
-          box-shadow: 0 0 8px rgba(0, 0, 0, 0.4);
   -webkit-transform: translate(-50%, -50%) scale(1.1);
           transform: translate(-50%, -50%) scale(1.1);
   -webkit-transition: .4s;
@@ -101,8 +99,8 @@ main {
   position: absolute;
   text-align: center;
   text-transform: uppercase;
-  -webkit-transform: translate(-50%);
-          transform: translate(-50%);
+  -webkit-transform: translateX(-50%);
+          transform: translateX(-50%);
   -webkit-user-select: none;
      -moz-user-select: none;
       -ms-user-select: none;

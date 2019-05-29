@@ -1,3 +1,12 @@
 $mainColor: #3498db;
 $secondColor: rgb(255, 255, 255);
 $fadeOutDuration: .3s;
+
+$center: translate(-50%, -50%);
+
+@mixin centerElement($pos) {
+	position: $pos;
+	top: 50%;
+	left: 50%;
+	transform: $center;
+}

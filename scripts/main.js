@@ -2,7 +2,8 @@ const words = wordsData; // data/wordsData.js
 let wordsFall, globalScore;
 let rate = 5000; // 5_000
 let fallingDuration = 2 * rate;
-let scoreFactor = 100;
+let scoreFactor = 1;
+let fallenWords = 0;
 const vpWidth = window.innerWidth || Math.round(window.visualViewport.width);
 const vpHeight = window.innerHeight || Math.round(window.visualViewport.height);
 const prevScore = window.localStorage.getItem("prevScore") || 0;
@@ -53,9 +54,19 @@ function dropWord() {
 	// Define random left offset (the elt has to not overflow from the screen)
 	const left = Math.floor(Math.random() * (vpWidth - pWidth) + pWidth / 2);
 
+	fallenWords += 1;
+
+	if (fallenWords > 5) {
+		rate -= 500;
+		fallenWords = 0;
+		scoreFactor += 1;
+	}
+
 	$p
-		.css("top", `${0 - pHeight}px`) // to not be visible
-		.css("left", `${left}px`) // generated position
+		.css({
+			"top": `${0 - pHeight}px`, // to not be visible
+			"left": `${left}px` // generated position
+		})
 		.addClass(word)
 		.animate({
 			top: "100vh"
@@ -84,9 +95,9 @@ function setupUI() {
 
 				if (localScore) {
 					$(this).val("");
-					incrementScore(localScore)
+					incrementScore(localScore * scoreFactor);
 				} else {
-					$(this).addClass("invalid")
+					$(this).addClass("invalid");
 				}
 			} else {
 				$(this).removeClass("invalid");
