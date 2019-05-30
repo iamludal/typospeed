@@ -1,0 +1,26 @@
+#loading {
+	@include centerElement(absolute);
+	animation: animate 1.2s linear infinite;
+	border: 5px solid;
+	border-color: $secondColor transparent $secondColor;
+	border-radius: 50%;
+	height: 64px;
+	opacity: 0;
+	pointer-events: none;
+	transition: .3s;
+	width: 64px;
+}
+  
+#loading.fadeIn {
+	opacity: 1;
+}
+
+// Animation
+@keyframes animate {
+	0% {
+	  transform: $center rotate(0deg);
+	}
+	100% {
+	  transform: $center rotate(360deg);
+	}
+}

@@ -2,6 +2,7 @@
 @import 'partials/startMenu';
 @import 'partials/gameUI';
 @import 'partials/endScreen';
+@import 'partials/loading';
 
 body {
 	margin: 0;
@@ -20,3 +21,4 @@ button {
   cursor: pointer;
 }  
 //
+

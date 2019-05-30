@@ -1,151 +1,207 @@
-const words = wordsData; // data/wordsData.js
-let wordsFall, globalScore;
-let rate = 5000; // 5_000
-let fallingDuration = 2 * rate;
-let scoreFactor = 1;
-let fallenWords = 0;
-const vpWidth = window.innerWidth || Math.round(window.visualViewport.width);
-const vpHeight = window.innerHeight || Math.round(window.visualViewport.height);
-const prevScore = window.localStorage.getItem("prevScore") || 0;
-const highScore = window.localStorage.getItem("highScore") || prevScore || 0;
+// const vpWidth = window.innerWidth || Math.round(window.visualViewport.width);
+// const vpHeight = window.innerHeight || Math.round(window.visualViewport.height);
+// const prevScore = window.localStorage.getItem("prevScore") || 0;
+// const highScore = window.localStorage.getItem("highScore") || prevScore;
+// let wordsFall, fallenWords, words, rate, fallingDuration;
+let globalScore, scoreFactor;
+let ended = false;
+
 
 // jQuery
-jQuery(function ($) {
-	$("#prev-score span").html(prevScore);
-	$("#high-score span").html(highScore);
+jQuery(async function ($) {
+	// Load words
+	// words = await fetch("https://api.myjson.com/bins/y9h8z")
+	// 	.then(data => data.json())
+	// 	.catch(console.log);
 
-	$("#menu").fadeIn(200);
+	// $(".high-score span").html(formatNb(highScore));
+	// $(".prev-score span").html(formatNb(prevScore));
 
+	// // When words are loaded, hide loading logo and display menu
+	// $("#loading").fadeOut(200, () => { $("#start-menu").fadeIn(200) });
+
+	// Play new game
 	$("button").one("click", playGame)
 })
 
-function playGame() {
-	globalScore = 0; // setup score
+// function playGame() {
+// 	globalScore = 0; // setup score
+// 	rate = 5000; // 5_000
+// 	fallingDuration = 2 * rate;
+// 	scoreFactor = 1;
 
-	// Hide the menu
-	$("#menu")
-		.addClass("fadeOut")
-		.one("transitionend", setupUI);
+// 	$startMenu.fadeOut(500, setupUI);
 
-	// To never lose the input focus while playing
-	$(document).click(() => $("#input").focus())
+// 	// To never lose the input focus while playing
+// 	$(document).click(() => $("#input").focus())
 
-	// Drop words
-	wordsFall = window.setInterval(dropWord, rate)
-
-	// $(document).keyup(e => {
-	// 	if (e.key === "Escape") endGame();
-	// })
+// 	// Drop words
+// 	wordsFall = window.setInterval(dropWord, rate)
 }
 
 function dropWord() {
-	// Generate random word, create the paragraph and add it to "main"
-	const i = Math.floor(Math.random() * words.length);
-	const word = words[i];
-	const $p = $("<p>", {
-		html: word,
-		class: "word"
-	}).appendTo($('#playground'))
+	// // Generate random word, create the paragraph and add it to "main"
+	// const i = Math.floor(Math.random() * words.length);
+	// const word = words[i];
+	// const $p = $("<p>", {
+	// 	html: word,
+	// 	class: "word"
+	// }).appendTo($('#playground'))
 
 	// Retrieve total width and height of the paragraph
-	const pWidth = $p.outerWidth();
-	const pHeight = $p.outerHeight();
+	// const pWidth = $p.outerWidth();
+	// const pHeight = $p.outerHeight();
 
 	// Define random left offset (the elt has to not overflow from the screen)
-	const left = Math.floor(Math.random() * (vpWidth - pWidth) + pWidth / 2);
+	// const left = Math.floor(Math.random() * (vpWidth - pWidth) + pWidth / 2);
 
-	fallenWords += 1;
+	// fallenWords += 1;
 
-	if (fallenWords > 5) {
-		rate -= 500;
-		fallenWords = 0;
-		scoreFactor += 1;
-	}
+	// // Increase difficulty
+	// if (fallenWords >= 5) {
+	// 	rate -= 400;
+	// 	fallingDuration = 2 * rate;
+	// 	fallenWords = 0;
+	// 	scoreFactor += 1;
 
-	$p
-		.css({
-			"top": `${0 - pHeight}px`, // to not be visible
-			"left": `${left}px` // generated position
-		})
-		.addClass(word)
-		.animate({
-			top: "100vh"
-		}, {
-				duration: fallingDuration,
-				queue: false,
-				easing: "linear",
-				complete: endGame
-			})
+	// 	// Update falling interval
+	// 	window.clearInterval(wordsFall);
+	// 	wordsFall = window.setInterval(dropWord, rate);
+	// }
+
+	// Drop the word
+	// $p
+	// 	.css({
+	// 		"top": `${0 - pHeight}px`, // to not be visible
+	// 		"left": `${left}px` // generated position
+	// 	})
+	// 	.addClass(word)
+	// 	.animate({
+	// 		top: "100vh"
+	// 	}, {
+	// 			duration: fallingDuration,
+	// 			queue: false,
+	// 			easing: "linear",
+	// 			complete: endGame
+	// 		})
 }
 
-function setupUI() {
-	$("#menu").hide();
+// // Function to setup the UI
+// function setupUI() {
+// 	$("#menu").hide();
 
-	$("#bottom-bar").animate({
-		bottom: 0,
-		opacity: 1
-	}, 400)
+// 	// Display bottom bar
+// 	$("#bottom-bar").animate({
+// 		bottom: 0,
+// 		opacity: 1
+// 	}, 400)
 
-	$("#input")
-		.focus()
-		// REMOVEMATCH DOWN HERE \/
-		.keyup(function (e) {
-			if (e.key === "Enter") {
-				const localScore = removeMatch(this.value);
+// 	// Focus the input + add event listener
+// 	$("#input")
+// 		.focus()
+// 		.keyup(inputListener)
+// }
 
-				if (localScore) {
-					$(this).val("");
-					incrementScore(localScore * scoreFactor);
-				} else {
-					$(this).addClass("invalid");
-				}
-			} else {
-				$(this).removeClass("invalid");
-			}
-		})
-}
+// Function to remove an
+function inputListener(event) {
+	// No "enter" key pressed : only remove invalid class
+	// if (event.key !== "Enter") return $(this).removeClass("invalid");
 
-function removeMatch(value) {
-	const inputVal = value.toLowerCase().trim();
-	let a;
+	const $input = $("#input");
+	const inputVal = $input.val().trim().toLowerCase();
+	let match;
+
+	// Try to find a match for the given value
 	try {
-		a = $(`.${inputVal}:first`);
+		match = $(`.${inputVal}:first`);
 	} catch (e) {
-		return 0;
+		return $input.addClass("invalid");
 	}
 
-	const leftOffset = parseInt(a.css("left"));
-	const localScore = parseInt(a.css("bottom"));
+	if (!match.length) return $input.addClass("invalid");
+
+	const leftOffset = parseInt(match.css("left"));
+	const localScore = parseInt(match.css("bottom"));
+	const wordLength = match.html().trim().length;
 
 	const sign = leftOffset > vpWidth / 2 ? "+" : "-";
 
-	a.stop().animate({
+	// Remove word animation (left/right swipe)
+	match.stop().animate({
 		left: sign + "=100",
 		opacity: 0
-	}, 300, () => a.remove());
+	}, 300, () => match.remove());
 
-	return a.length > 0 ? localScore : 0;
+	// Reset input value + increment score
+	$input.val("");
+	incrementScore(localScore * scoreFactor + 25 * wordLength);
 }
 
 // Function to end the game
 function endGame() {
+	// To only trigger the function once
+	if (ended) return;
+	else ended = true;
+
 	// Accelerate remaining words and remove them
 	$(".word").animate({
 		top: "+=25px",
 		opacity: 0
 	}, 200, function () { $(this).remove() });
+
 	window.clearInterval(wordsFall);
 
+	// Storages
 	window.localStorage.setItem("prevScore", globalScore);
+
+	$("#final-score span").html(formatNb(globalScore));
 
 	if (!highScore || globalScore > highScore) {
 		window.localStorage.setItem("highScore", globalScore);
+		$("#end-scores .prev-score span").html(globalScore);
 	}
+
+	// Hide game UI
+	$("#game-ui")
+		.fadeOut(300, () => $("#end-screen").addClass("visible"));
+
+	$("#end-screen").find("#btn-menu").one("click", () => {
+		location.reload();
+	})
+
 
 }
 
 // Function to increment the user's score
 function incrementScore(nb) {
 	globalScore += nb;
-	$("#score-label span").html(globalScore);
+	$("#score-label span").html(formatNb(globalScore));
+}
+
+// Format number to readable string
+function formatNb(nb) {
+	let converted;
+	if (typeof nb === "string") {
+		return parseInt(nb).toLocaleString();
+	} else if (typeof nb === "number") {
+		return nb.toLocaleString();
+	}
+}
+
+// To hide an element
+function hideElement($elt, callback) {
+	$elt
+		.addClass("fadeOut")
+		.one("transitionend", () => {
+			$elt.fadeOut(0)
+			callback()
+		})
+}
+
+// To show an element
+function showElement($elt, callback) {
+	$elt
+		.fadeIn(0)
+		.addClass("fadeIn")
+		.one("transitionend", callback)
 }

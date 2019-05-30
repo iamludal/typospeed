@@ -2,15 +2,13 @@
 <html lang="en">
 
 <head>
+
   <meta charset="UTF-8">
   <title>Typospeed</title>
 
   <link rel="stylesheet" type="text/css" href="styles/style.css">
   <link href="https://fonts.googleapis.com/css?family=Montserrat:400,500&display=swap" rel="stylesheet">
 
-  <script src="data/wordsData.js" defer></script>
-  <script src="scripts/jquery.js" defer></script>
-  <script src="scripts/main.js" defer></script>
 </head>
 
 <body>
@@ -29,19 +27,35 @@
   </div>
 
   <!-- Start menu -->
-  <div id="menu">
+  <div id="start-menu" class="menu">
     <div id="scores">
-      <div id="high-score">Highest score: <span></span></div>
-      <div id="prev-score">Previous score: <span></span></div>
+      <div class="high-score">Highest score: <span></span></div>
+      <div class="prev-score">Previous score: <span></span></div>
     </div>
 
     <button id="play-btn">PLAY</button>
   </div>
 
   <!-- End screen -->
-  <div id="end-screen">
+  <div id="end-screen" class="menu">
+    <h2>Game Over</h2>
 
+    <h3 id="final-score">Score: <span></span></h3>
+
+    <div id="end-scores">
+      <div class="high-score">Highest score: <span></span></div>
+    </div>
+
+    <div class="buttons">
+      <button id="btn-menu">Menu</button>
+      <button id="btn-play-again">Play again</button>
+    </div>
   </div>
+
+  <div id="loading"></div>
+
+  <!-- Scripts -->
+  <script src="scripts/new-main.js"></script>
 
 </body>
 

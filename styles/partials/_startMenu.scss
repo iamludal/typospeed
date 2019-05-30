@@ -1,20 +1,30 @@
-#menu {
-	display: none;
+#start-menu {
+	opacity: 0;
+	pointer-events: none;
+	transition: opacity .5s;
 }
 
 // When menu disappears
-#menu.fadeOut {
+#start-menu.fadeOut {
+	opacity: 0;
+	pointer-events: none;
+
 	#scores {
 		transform: translateY(-100%);
-		transition: $fadeOutDuration;
 	}
 
 	#play-btn {
 		transform: $center scale(10);
-		opacity: 0;
-		transition: $fadeOutDuration;
 	}
 }
+
+// Menu appears
+#start-menu.fadeIn {
+	opacity: 1;
+	pointer-events: all;
+	transition: opacity 1s;
+}
+
 
 // Top left scores panel
 #scores {
@@ -24,6 +34,7 @@
   padding: 20px;
 	position: absolute;
 	top: 0;
+	transition: .3s;
 }
 
 // Play button
@@ -35,13 +46,13 @@
 	border-radius: 50%;
   color: $secondColor;
   font-size: 1.1em;
-  height: 100px;
-  transition: .4s;
+	height: 100px;
+	transform: $center scale(1);
+  transition: .3s;
 	width: 100px;
   
   &:hover {
-    transform: $center scale(1.1);
-    transition: .4s;
+		transform: $center scale(1.1);
   }
 }
 

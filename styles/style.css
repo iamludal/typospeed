@@ -1,20 +1,30 @@
-#menu {
-  display: none;
+#start-menu {
+  opacity: 0;
+  pointer-events: none;
+  -webkit-transition: opacity .5s;
+  transition: opacity .5s;
 }
 
-#menu.fadeOut #scores {
+#start-menu.fadeOut {
+  opacity: 0;
+  pointer-events: none;
+}
+
+#start-menu.fadeOut #scores {
   -webkit-transform: translateY(-100%);
           transform: translateY(-100%);
-  -webkit-transition: 0.3s;
-  transition: 0.3s;
 }
 
-#menu.fadeOut #play-btn {
+#start-menu.fadeOut #play-btn {
   -webkit-transform: translate(-50%, -50%) scale(10);
           transform: translate(-50%, -50%) scale(10);
-  opacity: 0;
-  -webkit-transition: 0.3s;
-  transition: 0.3s;
+}
+
+#start-menu.fadeIn {
+  opacity: 1;
+  pointer-events: all;
+  -webkit-transition: opacity 1s;
+  transition: opacity 1s;
 }
 
 #scores {
@@ -29,6 +39,8 @@
   padding: 20px;
   position: absolute;
   top: 0;
+  -webkit-transition: .3s;
+  transition: .3s;
 }
 
 #play-btn {
@@ -43,19 +55,41 @@
   color: white;
   font-size: 1.1em;
   height: 100px;
-  -webkit-transition: .4s;
-  transition: .4s;
+  -webkit-transform: translate(-50%, -50%) scale(1);
+          transform: translate(-50%, -50%) scale(1);
+  -webkit-transition: .3s;
+  transition: .3s;
   width: 100px;
 }
 
 #play-btn:hover {
   -webkit-transform: translate(-50%, -50%) scale(1.1);
           transform: translate(-50%, -50%) scale(1.1);
-  -webkit-transition: .4s;
-  transition: .4s;
 }
 
-main {
+#game-ui {
+  -webkit-transition: .3s;
+  transition: .3s;
+}
+
+#game-ui.fadeIn {
+  opacity: 1;
+  pointer-events: all;
+}
+
+#game-ui.fadeIn #bottom-bar {
+  opacity: 1;
+  -webkit-transform: translateX(-50%) translateY(0);
+          transform: translateX(-50%) translateY(0);
+}
+
+#game-ui.fadeOut,
+#game-ui {
+  opacity: 0;
+  pointer-events: none;
+}
+
+#playground {
   height: 100vh;
   overflow: hidden;
   position: relative;
@@ -66,6 +100,7 @@ main {
   -webkit-box-align: center;
       -ms-flex-align: center;
           align-items: center;
+  bottom: 0;
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
@@ -80,8 +115,10 @@ main {
   opacity: 0;
   padding: 20px 0;
   position: fixed;
-  -webkit-transform: translateX(-50%);
-          transform: translateX(-50%);
+  -webkit-transform: translateX(-50%) translateY(100%);
+          transform: translateX(-50%) translateY(100%);
+  -webkit-transition: .3s;
+  transition: .3s;
   -webkit-user-select: none;
      -moz-user-select: none;
       -ms-user-select: none;
@@ -101,10 +138,38 @@ main {
   text-transform: uppercase;
   -webkit-transform: translateX(-50%);
           transform: translateX(-50%);
+  -webkit-transition: .3s;
+  transition: .3s;
   -webkit-user-select: none;
      -moz-user-select: none;
       -ms-user-select: none;
           user-select: none;
+}
+
+@-webkit-keyframes fallingWords {
+  0% {
+    top: 0;
+    -webkit-transform: translate(-50%, -100%);
+            transform: translate(-50%, -100%);
+  }
+  100% {
+    top: 100%;
+    -webkit-transform: translate(-50%);
+            transform: translate(-50%);
+  }
+}
+
+@keyframes fallingWords {
+  0% {
+    top: 0;
+    -webkit-transform: translate(-50%, -100%);
+            transform: translate(-50%, -100%);
+  }
+  100% {
+    top: 100%;
+    -webkit-transform: translate(-50%);
+            transform: translate(-50%);
+  }
 }
 
 #score-label {
@@ -172,7 +237,124 @@ main {
 }
 
 #end-screen {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  -webkit-transform: translate(-50%, -50%);
+          transform: translate(-50%, -50%);
   display: none;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  text-align: center;
+  background: rgba(0, 0, 0, 0.1);
+  opacity: 0;
+  color: white;
+  border-radius: 10px;
+  width: 50vh;
+}
+
+#end-screen > * {
+  margin-bottom: 25px;
+  margin-top: 0;
+}
+
+#end-screen > *:first-child {
+  margin-top: 25px;
+}
+
+#end-screen .buttons {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+}
+
+#end-screen .buttons button:first-child {
+  margin-right: 50px;
+}
+
+#end-screen .buttons button {
+  height: 40px;
+  border-radius: 10px;
+  border: none;
+  -webkit-box-shadow: inset 0 0 0 3px white;
+          box-shadow: inset 0 0 0 3px white;
+  background: none;
+  padding: 0 25px;
+  color: inherit;
+  -webkit-transition: .2s;
+  transition: .2s;
+  font-size: 1em;
+}
+
+#end-screen .buttons button:hover {
+  background: white;
+  -webkit-box-shadow: none;
+          box-shadow: none;
+  color: #3498db;
+  -webkit-transition: .2s;
+  transition: .2s;
+}
+
+#end-screen.visible {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-transition: .3s;
+  transition: .3s;
+  opacity: 1;
+}
+
+#loading {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  -webkit-transform: translate(-50%, -50%);
+          transform: translate(-50%, -50%);
+  -webkit-animation: animate 1.2s linear infinite;
+          animation: animate 1.2s linear infinite;
+  border: 5px solid;
+  border-color: white transparent white;
+  border-radius: 50%;
+  height: 64px;
+  opacity: 0;
+  pointer-events: none;
+  -webkit-transition: .3s;
+  transition: .3s;
+  width: 64px;
+}
+
+#loading.fadeIn {
+  opacity: 1;
+}
+
+@-webkit-keyframes animate {
+  0% {
+    -webkit-transform: translate(-50%, -50%) rotate(0deg);
+            transform: translate(-50%, -50%) rotate(0deg);
+  }
+  100% {
+    -webkit-transform: translate(-50%, -50%) rotate(360deg);
+            transform: translate(-50%, -50%) rotate(360deg);
+  }
+}
+
+@keyframes animate {
+  0% {
+    -webkit-transform: translate(-50%, -50%) rotate(0deg);
+            transform: translate(-50%, -50%) rotate(0deg);
+  }
+  100% {
+    -webkit-transform: translate(-50%, -50%) rotate(360deg);
+            transform: translate(-50%, -50%) rotate(360deg);
+  }
 }
 
 body {
