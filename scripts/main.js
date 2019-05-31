@@ -1,207 +1,259 @@
-// const vpWidth = window.innerWidth || Math.round(window.visualViewport.width);
-// const vpHeight = window.innerHeight || Math.round(window.visualViewport.height);
-// const prevScore = window.localStorage.getItem("prevScore") || 0;
-// const highScore = window.localStorage.getItem("highScore") || prevScore;
-// let wordsFall, fallenWords, words, rate, fallingDuration;
-let globalScore, scoreFactor;
-let ended = false;
+class Game {
+	constructor(words) {
+		this.words = words;
+		this.vpWidth = window.innerWidth;
 
+		// Scores data
+		this.prevScore = localStorage.getItem("prevScore") || 0;
+		this.highScore = localStorage.getItem("highScore") || this.prevScore;
 
-// jQuery
-jQuery(async function ($) {
-	// Load words
-	// words = await fetch("https://api.myjson.com/bins/y9h8z")
-	// 	.then(data => data.json())
-	// 	.catch(console.log);
+		// DOM Elements
+		this.startMenu = document.getElementById("start-menu");
+		this.endScreen = document.getElementById("end-screen");
+		this.gameUI = document.getElementById("game-ui");
+		this.mainInput = document.getElementById("input");
+		this.playground = document.getElementById("playground");
+		this.scoreLabel = document.querySelector("#score-label span");
+		this.playButton = document.getElementById("play-btn");
+		this.highScoreLabel = document.querySelector(".high-score span");
+		this.prevScoreLabel = document.querySelector(".prev-score span");
+		this.endScores = {
+			finalScoreElt: document.querySelector("#final-score span"),
+			highScoreElt: document.querySelector("#high-score span")
+		}
 
-	// $(".high-score span").html(formatNb(highScore));
-	// $(".prev-score span").html(formatNb(prevScore));
+		// Functions to handle listeners while keeping the class's "this"
+		this.onKeyUp = this.checkMatch.bind(this);
+		this.prevFocusLoss = () => {
+			document.querySelector("#input").focus();
+		}
 
-	// // When words are loaded, hide loading logo and display menu
-	// $("#loading").fadeOut(200, () => { $("#start-menu").fadeIn(200) });
-
-	// Play new game
-	$("button").one("click", playGame)
-})
-
-// function playGame() {
-// 	globalScore = 0; // setup score
-// 	rate = 5000; // 5_000
-// 	fallingDuration = 2 * rate;
-// 	scoreFactor = 1;
-
-// 	$startMenu.fadeOut(500, setupUI);
-
-// 	// To never lose the input focus while playing
-// 	$(document).click(() => $("#input").focus())
-
-// 	// Drop words
-// 	wordsFall = window.setInterval(dropWord, rate)
-}
-
-function dropWord() {
-	// // Generate random word, create the paragraph and add it to "main"
-	// const i = Math.floor(Math.random() * words.length);
-	// const word = words[i];
-	// const $p = $("<p>", {
-	// 	html: word,
-	// 	class: "word"
-	// }).appendTo($('#playground'))
-
-	// Retrieve total width and height of the paragraph
-	// const pWidth = $p.outerWidth();
-	// const pHeight = $p.outerHeight();
-
-	// Define random left offset (the elt has to not overflow from the screen)
-	// const left = Math.floor(Math.random() * (vpWidth - pWidth) + pWidth / 2);
-
-	// fallenWords += 1;
-
-	// // Increase difficulty
-	// if (fallenWords >= 5) {
-	// 	rate -= 400;
-	// 	fallingDuration = 2 * rate;
-	// 	fallenWords = 0;
-	// 	scoreFactor += 1;
-
-	// 	// Update falling interval
-	// 	window.clearInterval(wordsFall);
-	// 	wordsFall = window.setInterval(dropWord, rate);
-	// }
-
-	// Drop the word
-	// $p
-	// 	.css({
-	// 		"top": `${0 - pHeight}px`, // to not be visible
-	// 		"left": `${left}px` // generated position
-	// 	})
-	// 	.addClass(word)
-	// 	.animate({
-	// 		top: "100vh"
-	// 	}, {
-	// 			duration: fallingDuration,
-	// 			queue: false,
-	// 			easing: "linear",
-	// 			complete: endGame
-	// 		})
-}
-
-// // Function to setup the UI
-// function setupUI() {
-// 	$("#menu").hide();
-
-// 	// Display bottom bar
-// 	$("#bottom-bar").animate({
-// 		bottom: 0,
-// 		opacity: 1
-// 	}, 400)
-
-// 	// Focus the input + add event listener
-// 	$("#input")
-// 		.focus()
-// 		.keyup(inputListener)
-// }
-
-// Function to remove an
-function inputListener(event) {
-	// No "enter" key pressed : only remove invalid class
-	// if (event.key !== "Enter") return $(this).removeClass("invalid");
-
-	const $input = $("#input");
-	const inputVal = $input.val().trim().toLowerCase();
-	let match;
-
-	// Try to find a match for the given value
-	try {
-		match = $(`.${inputVal}:first`);
-	} catch (e) {
-		return $input.addClass("invalid");
-	}
-
-	if (!match.length) return $input.addClass("invalid");
-
-	const leftOffset = parseInt(match.css("left"));
-	const localScore = parseInt(match.css("bottom"));
-	const wordLength = match.html().trim().length;
-
-	const sign = leftOffset > vpWidth / 2 ? "+" : "-";
-
-	// Remove word animation (left/right swipe)
-	match.stop().animate({
-		left: sign + "=100",
-		opacity: 0
-	}, 300, () => match.remove());
-
-	// Reset input value + increment score
-	$input.val("");
-	incrementScore(localScore * scoreFactor + 25 * wordLength);
-}
-
-// Function to end the game
-function endGame() {
-	// To only trigger the function once
-	if (ended) return;
-	else ended = true;
-
-	// Accelerate remaining words and remove them
-	$(".word").animate({
-		top: "+=25px",
-		opacity: 0
-	}, 200, function () { $(this).remove() });
-
-	window.clearInterval(wordsFall);
-
-	// Storages
-	window.localStorage.setItem("prevScore", globalScore);
-
-	$("#final-score span").html(formatNb(globalScore));
-
-	if (!highScore || globalScore > highScore) {
-		window.localStorage.setItem("highScore", globalScore);
-		$("#end-scores .prev-score span").html(globalScore);
-	}
-
-	// Hide game UI
-	$("#game-ui")
-		.fadeOut(300, () => $("#end-screen").addClass("visible"));
-
-	$("#end-screen").find("#btn-menu").one("click", () => {
-		location.reload();
-	})
-
-
-}
-
-// Function to increment the user's score
-function incrementScore(nb) {
-	globalScore += nb;
-	$("#score-label span").html(formatNb(globalScore));
-}
-
-// Format number to readable string
-function formatNb(nb) {
-	let converted;
-	if (typeof nb === "string") {
-		return parseInt(nb).toLocaleString();
-	} else if (typeof nb === "number") {
-		return nb.toLocaleString();
-	}
-}
-
-// To hide an element
-function hideElement($elt, callback) {
-	$elt
-		.addClass("fadeOut")
-		.one("transitionend", () => {
-			$elt.fadeOut(0)
-			callback()
+		// Update the viewport width if the window is resized
+		window.addEventListener("resize", () => {
+			this.vpWidth = window.innerWidth;
 		})
+	}
+
+	showStartMenu() {
+		this.highScoreLabel.textContent = this.format(this.highScore);
+		this.prevScoreLabel.textContent = this.format(this.prevScore);
+
+		// if no timeout : bug (no fade in)
+		window.setTimeout(() => { this.startMenu.classList.add("visible") }, 10)
+
+
+		// Listen for click on #play-btn
+		const listener = () => {
+			this.startMenu.classList.replace("visible", "hide");
+			// Wait a bit before calling the play() method
+			window.setTimeout(() => this.play(), 200);
+			this.playButton.removeEventListener("click", listener);
+		}
+
+		// Play button click listener
+		this.playButton.addEventListener("click", listener);
+
+	}
+
+	play() {
+		// Reset variables
+		this.scoreFactor = 1;
+		this.fallenWords = 0;
+		this.rate = 5000; // 5.000
+		this.fallingDuration = 2 * this.rate;
+		this.score = 0;
+
+		this.mainInput.focus();
+		this.mainInput.addEventListener("keyup", this.onKeyUp);
+		document.addEventListener("click", this.prevFocusLoss);
+
+		this.gameUI.classList.add("visible");
+
+		this.updateInterval(this.rate);
+	}
+
+	dropWord() {
+		const random = Math.floor(Math.random() * this.words.length);
+		const word = this.words[random];
+		const wordElt = document.createElement("p");
+		wordElt.textContent = word;
+		wordElt.classList.add("word");
+		wordElt.dataset.word = word;
+		this.playground.append(wordElt);
+
+		const wordWidth = wordElt.offsetWidth;
+		const leftOffset = Math.round(Math.random() * (this.vpWidth - wordWidth) + wordWidth / 2);
+
+		this.fallenWords++;
+
+		// Increase difficulty
+		if (this.fallenWords >= 5) {
+			this.rate -= 400;
+			this.fallingDuration = 2 * this.rate;
+			this.fallenWords = 0;
+			this.scoreFactor++;
+
+			// Update the interval
+			this.updateInterval(this.rate);
+		}
+
+		wordElt.style.left = `${leftOffset}px`;
+		wordElt.style.animation = `fallingWords ${this.fallingDuration}ms linear forwards`;
+
+		wordElt.addEventListener("animationend", () => this.endGame());
+	}
+
+	incrementScore(amount) {
+		this.score += amount;
+		this.scoreLabel.textContent = this.format(this.score);
+	}
+
+	updateInterval(rate) {
+
+		const interval = () => {
+			this.dropWord();
+		}
+
+		window.clearInterval(this.wordsFall);
+
+		this.wordsFall = window.setInterval(interval, rate);
+	}
+
+	checkMatch(e) {
+		const value = this.mainInput.value.toLowerCase();
+
+		if (e.key !== "Enter") {
+			this.mainInput.classList.remove("invalid");
+			return;
+		}
+
+		let match;
+
+		try {
+			match = document.querySelector(`.word[data-word='${value}']`);
+			if (!match) throw "No match";
+		} catch (e) {
+			// When the user enters something weird (éç@_-...)
+			// (or when there is no match)
+			this.mainInput.classList.add("invalid");
+			return;
+		}
+
+		const matchStyle = window.getComputedStyle(match);
+		const matchScore = parseInt(matchStyle.bottom);
+		const leftOffset = parseInt(matchStyle.left);
+
+		// Remove the matching word nicely
+		match.style.top = matchStyle.top;
+		match.style.transform = matchStyle.transform;
+		match.style.animation = "";
+		match.style.opacity = 0;
+
+		if (leftOffset > (this.vpWidth / 2)) {
+			match.style.left = `${leftOffset + 50}px`;
+		} else {
+			match.style.left = `${leftOffset - 50}px`;
+		}
+
+		match.addEventListener("transitionend", () => {
+			match.remove();
+		})
+
+		/* The score takes in account the currenct scoreFactor, the bottom 
+		offset of the match and the length of the word. The closer to the 
+		top and the longer the word, the most points you get. */
+		this.incrementScore(this.scoreFactor * matchScore + 25 * value.length);
+
+		this.mainInput.value = "";
+
+	}
+
+	endGame() {
+		const words = Array.from(document.getElementsByClassName("word"));
+		// Determine highest score and update cookies
+		const highScore = Math.max(this.score, this.highScore);
+		localStorage.setItem("prevScore", this.score);
+		localStorage.setItem("highScore", highScore);
+
+		// Update scores text content of the end screen
+		this.endScores.finalScoreElt.textContent = this.format(this.score);
+		this.endScores.highScoreElt.textContent = this.format(highScore);
+
+		this.mainInput.removeEventListener("keyup", this.onKeyUp);
+		document.removeEventListener("click", this.prevFocusLoss);
+
+		window.clearInterval(this.wordsFall);
+
+		this.gameUI.classList.remove("visible");
+
+		const listener = () => {
+			words.forEach(word => word.remove());
+			this.endScreen.classList.add("visible");
+			this.gameUI.removeEventListener("transitionend", listener);
+		}
+
+		this.gameUI.addEventListener("transitionend", listener);
+
+	}
+
+	format(number) {
+		/* Convert big number into human readable number
+		(depending on local format)
+			E.g.: 2493942 => 2.493.942 
+		*/
+		if (typeof number === "string") {
+			number = parseInt(number);
+			if (isNaN(number)) return 0;
+		}
+		return number.toLocaleString();
+	}
 }
 
-// To show an element
-function showElement($elt, callback) {
-	$elt
-		.fadeIn(0)
-		.addClass("fadeIn")
-		.one("transitionend", callback)
+
+// Main function
+const main = async () => {
+	let words = localStorage.getItem("words");
+
+	if (!words) {
+		const loading = document.querySelector("#loading");
+		loading.classList.add("fadeIn");
+
+		const data = await fetch("https://gist.githubusercontent.com/luddoz-c/8f189ae9648719b6b98251927b0dc81b/raw/")
+			.then(d => d.json())
+			.catch(console.log);
+
+		localStorage.setItem("version", data.version);
+		localStorage.setItem("words", JSON.stringify(data.words));
+
+		loading.classList.remove("fadeIn");
+		loading.addEventListener("transitionend", () => {
+			loading.remove();
+		})
+
+	} else {
+		words = JSON.parse(words);
+		// no need for the loading element
+		loading.remove();
+	}
+
+	// Start the game
+	const game = new Game(words);
+	game.showStartMenu();
+
+	// Update the db in background
+	fetch("https://gist.githubusercontent.com/luddoz-c/8f189ae9648719b6b98251927b0dc81b/raw/")
+		.then(d => d.json())
+		.then(data => {
+			// If up to date, nothing else to do (so return)
+			if (localStorage.version === data.version) return;
+
+			// Update cookies
+			localStorage.setItem("version", data.version);
+			localStorage.setItem("words", JSON.stringify(data.words));
+		})
+		.catch(console.log);
+
 }
+
+// Launch main function
+main();
