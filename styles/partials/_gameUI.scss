@@ -1,21 +1,16 @@
-#game-ui {
-	transition: .3s;
-}
-
-#game-ui.fadeIn {
+#game-ui.visible {
 	opacity: 1;
 	pointer-events: all;
-
+	
 	#bottom-bar {
-		opacity: 1;
 		transform: translateX(-50%) translateY(0);
 	}
 }
 
-#game-ui.fadeOut,
 #game-ui {
 	opacity: 0;
 	pointer-events: none;
+	transition: .3s;
 }
 
 // Playground
@@ -33,11 +28,11 @@
 	flex-direction: column;
 	justify-content: center;
   left: 50%;
-  opacity: 0;
+  // opacity: 0;
 	padding: 20px 0;
 	position: fixed;
 	transform: translateX(-50%) translateY(100%);
-	transition: .3s;
+	transition: inherit;
   user-select: none;
 }
 
@@ -54,7 +49,7 @@
 	text-align: center;
 	text-transform: uppercase;
 	transform: translateX(-50%);
-	transition: .3s;
+	transition: .4s;
 	user-select: none;
 }
 

@@ -1,55 +1,89 @@
 class Game {
 	constructor(words) {
 		this.words = words;
+		this.vpWidth = window.innerWidth;
+
+		// Scores data
+		this.prevScore = localStorage.getItem("prevScore") || 0;
+		this.highScore = localStorage.getItem("highScore") || this.prevScore;
+
+		// DOM Elements
+		this.startMenu = document.getElementById("start-menu");
+		this.endScreen = document.getElementById("end-screen");
+		this.gameUI = document.getElementById("game-ui");
+		this.mainInput = document.getElementById("input");
+		this.playground = document.getElementById("playground");
+		this.scoreLabel = document.querySelector("#score-label span");
+		this.playButton = document.getElementById("play-btn");
+		this.highScoreLabel = document.querySelector(".high-score span");
+		this.prevScoreLabel = document.querySelector(".prev-score span");
+		this.endScores = {
+			finalScoreElt: document.querySelector("#final-score span"),
+			highScoreElt: document.querySelector("#high-score span")
+		}
+
+		// Functions to handle listeners while keeping the class's "this"
 		this.onKeyUp = this.checkMatch.bind(this);
 		this.prevFocusLoss = () => {
 			document.querySelector("#input").focus();
 		}
+
+		// Update the viewport width if the window is resized
+		window.addEventListener("resize", () => {
+			this.vpWidth = window.innerWidth;
+		})
 	}
 
 	showStartMenu() {
-		const prevScore = localStorage.getItem("prevScore") || 0;
-		const highScore = localStorage.getItem("highScore") || prevScore;
-		const startMenu = document.querySelector("#start-menu");
-		const playButton = startMenu.querySelector("#play-btn");
-		const highScoreLabel = startMenu.querySelector(".high-score span");
-		const prevScoreLabel = startMenu.querySelector(".prev-score span");
-
-		highScoreLabel.textContent = this.format(highScore);
-		prevScoreLabel.textContent = this.format(prevScore);
+		this.highScoreLabel.textContent = this.format(this.highScore);
+		this.prevScoreLabel.textContent = this.format(this.prevScore);
 
 		// if no timeout : bug (no fade in)
-		window.setTimeout(() => { startMenu.className = "fadeIn" }, 10)
+		window.setTimeout(() => { this.startMenu.classList.add("visible") }, 10)
 
 
 		// Listen for click on #play-btn
-
 		const listener = () => {
-			startMenu.className = "fadeOut";
+			this.startMenu.classList.replace("visible", "hide");
 			// Wait a bit before calling the play() method
 			window.setTimeout(() => this.play(), 200);
-			playButton.removeEventListener("click", listener);
+			this.playButton.removeEventListener("click", listener);
 		}
 
 		// Play button click listener
-		playButton.addEventListener("click", listener);
+		this.playButton.addEventListener("click", listener);
 
 	}
 
+	play() {
+		// Reset variables
+		this.scoreFactor = 1;
+		this.fallenWords = 0;
+		this.rate = 5000; // 5.000
+		this.fallingDuration = 2 * this.rate;
+		this.score = 0;
+
+		this.mainInput.focus();
+		this.mainInput.addEventListener("keyup", this.onKeyUp);
+		document.addEventListener("click", this.prevFocusLoss);
+
+		this.gameUI.classList.add("visible");
+
+		this.updateInterval(this.rate);
+	}
+
 	dropWord() {
-		const vpWidth = window.innerWidth;
-		const playground = document.querySelector("#playground");
 		const random = Math.floor(Math.random() * this.words.length);
 		const word = this.words[random];
 		const wordElt = document.createElement("p");
 		wordElt.textContent = word;
 		wordElt.classList.add("word");
 		wordElt.dataset.word = word;
-		playground.append(wordElt);
+		this.playground.append(wordElt);
 
-		const wordWidth = parseInt(window.getComputedStyle(wordElt).width);
+		const wordWidth = wordElt.offsetWidth;
+		const leftOffset = Math.round(Math.random() * (this.vpWidth - wordWidth) + wordWidth / 2);
 
-		const leftOffset = Math.round(Math.random() * (vpWidth - wordWidth) + wordWidth / 2);
 		this.fallenWords++;
 
 		// Increase difficulty
@@ -65,6 +99,13 @@ class Game {
 
 		wordElt.style.left = `${leftOffset}px`;
 		wordElt.style.animation = `fallingWords ${this.fallingDuration}ms linear forwards`;
+
+		wordElt.addEventListener("animationend", () => this.endGame());
+	}
+
+	incrementScore(amount) {
+		this.score += amount;
+		this.scoreLabel.textContent = this.format(this.score);
 	}
 
 	updateInterval(rate) {
@@ -78,62 +119,43 @@ class Game {
 		this.wordsFall = window.setInterval(interval, rate);
 	}
 
-	play() {
-		const gameUI = document.querySelector("#game-ui");
-		const mainInput = document.querySelector("#input");
-
-		// Reset variables
-		this.scoreFactor = 1;
-		this.fallenWords = 0;
-		this.rate = 5000; // 5.000
-		this.fallingDuration = 2 * this.rate;
-		this.score = 0;
-
-		mainInput.focus();
-		mainInput.addEventListener("keyup", this.onKeyUp);
-		document.addEventListener("click", this.prevFocusLoss);
-
-		gameUI.className = "fadeIn";
-
-		this.updateInterval(this.rate);
-	}
-
-	incrementScore(amount) {
-		const scoreLabel = document.querySelector("#score-label span");
-		this.score += amount;
-		scoreLabel.textContent = this.format(this.score);
-	}
-
 	checkMatch(e) {
-		const mainInput = document.querySelector("#input");
+		const value = this.mainInput.value.toLowerCase();
+
 		if (e.key !== "Enter") {
-			mainInput.classList.remove("invalid");
+			this.mainInput.classList.remove("invalid");
 			return;
 		}
 
-		const value = mainInput.value.toLowerCase();
 		let match;
 
 		try {
-			match = document.querySelector(`.word[data-word="${value}"]`);
-			// So that 
+			match = document.querySelector(`.word[data-word='${value}']`);
 			if (!match) throw "No match";
 		} catch (e) {
-			mainInput.className = "invalid";
+			// When the user enters something weird (éç@_-...)
+			// (or when there is no match)
+			this.mainInput.classList.add("invalid");
 			return;
 		}
 
 		const matchStyle = window.getComputedStyle(match);
 		const matchScore = parseInt(matchStyle.bottom);
+		const leftOffset = parseInt(matchStyle.left);
 
 		// Remove the matching word nicely
 		match.style.top = matchStyle.top;
 		match.style.transform = matchStyle.transform;
 		match.style.animation = "";
-		match.style.left = (parseInt(matchStyle.left) + 50) + "px";
 		match.style.opacity = 0;
 
-		match.addEventListener("transitionend", function rm() {
+		if (leftOffset > (this.vpWidth / 2)) {
+			match.style.left = `${leftOffset + 50}px`;
+		} else {
+			match.style.left = `${leftOffset - 50}px`;
+		}
+
+		match.addEventListener("transitionend", () => {
 			match.remove();
 		})
 
@@ -142,13 +164,36 @@ class Game {
 		top and the longer the word, the most points you get. */
 		this.incrementScore(this.scoreFactor * matchScore + 25 * value.length);
 
-		mainInput.value = "";
+		this.mainInput.value = "";
 
 	}
 
 	endGame() {
-		const endScreen = document.querySelector("#end-screen");
+		const words = Array.from(document.getElementsByClassName("word"));
+		// Determine highest score and update cookies
+		const highScore = Math.max(this.score, this.highScore);
 		localStorage.setItem("prevScore", this.score);
+		localStorage.setItem("highScore", highScore);
+
+		// Update scores text content of the end screen
+		this.endScores.finalScoreElt.textContent = this.format(this.score);
+		this.endScores.highScoreElt.textContent = this.format(highScore);
+
+		this.mainInput.removeEventListener("keyup", this.onKeyUp);
+		document.removeEventListener("click", this.prevFocusLoss);
+
+		window.clearInterval(this.wordsFall);
+
+		this.gameUI.classList.remove("visible");
+
+		const listener = () => {
+			words.forEach(word => word.remove());
+			this.endScreen.classList.add("visible");
+			this.gameUI.removeEventListener("transitionend", listener);
+		}
+
+		this.gameUI.addEventListener("transitionend", listener);
+
 	}
 
 	format(number) {
@@ -163,6 +208,7 @@ class Game {
 		return number.toLocaleString();
 	}
 }
+
 
 // Main function
 const main = async () => {

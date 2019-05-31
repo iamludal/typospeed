@@ -1,14 +1,11 @@
 #start-menu {
 	opacity: 0;
 	pointer-events: none;
-	transition: opacity .5s;
+	transition: .5s;
 }
 
-// When menu disappears
-#start-menu.fadeOut {
-	opacity: 0;
-	pointer-events: none;
-
+// Start menu when not visible
+#start-menu.hide {
 	#scores {
 		transform: translateY(-100%);
 	}
@@ -19,10 +16,9 @@
 }
 
 // Menu appears
-#start-menu.fadeIn {
+#start-menu.visible {
 	opacity: 1;
 	pointer-events: all;
-	transition: opacity 1s;
 }
 
 
