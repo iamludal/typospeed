@@ -266,8 +266,10 @@ const main = async () => {
 			.then(d => d.json())
 			.catch(console.log);
 
+		words = data.words;
+
 		localStorage.setItem("version", data.version);
-		localStorage.setItem("words", JSON.stringify(data.words));
+		localStorage.setItem("words", JSON.stringify(words));
 
 		loading.classList.remove("fadeIn");
 		loading.addEventListener("transitionend", () => {
