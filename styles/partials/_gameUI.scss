@@ -1,15 +1,21 @@
 #game-ui.visible {
 	opacity: 1;
-	pointer-events: all;
 	
 	#bottom-bar {
 		transform: translateX(-50%) translateY(0);
 	}
 }
 
-#game-ui {
+#game-ui.hidden {
 	opacity: 0;
-	pointer-events: none;
+
+	#bottom-bar {
+		transform: translateX(-50%) translateY(100%);
+	}
+}
+
+#game-ui {
+	position: relative;
 	transition: .3s;
 }
 
@@ -28,7 +34,6 @@
 	flex-direction: column;
 	justify-content: center;
   left: 50%;
-  // opacity: 0;
 	padding: 20px 0;
 	position: fixed;
 	transform: translateX(-50%) translateY(100%);

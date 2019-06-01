@@ -14,7 +14,6 @@ class Game {
 		this.mainInput = document.getElementById("input");
 		this.playground = document.getElementById("playground");
 		this.scoreLabel = document.querySelector("#score-label span");
-		this.playButton = document.getElementById("play-btn");
 		this.highScoreLabel = document.querySelector(".high-score span");
 		this.prevScoreLabel = document.querySelector(".prev-score span");
 		this.endScores = {
@@ -23,7 +22,6 @@ class Game {
 		}
 
 		// Functions to handle listeners while keeping the class's "this"
-		this.onKeyUp = this.checkMatch.bind(this);
 		this.prevFocusLoss = () => {
 			document.querySelector("#input").focus();
 		}
@@ -34,25 +32,69 @@ class Game {
 		})
 	}
 
-	showStartMenu() {
+	setupListeners() {
+		const playButton = document.getElementById("play-btn");
+		const menuBtn = document.getElementById("btn-menu");
+		const playAgainBtn = document.getElementById("btn-play-again");
+
+		// Input listener
+		this.mainInput.addEventListener("keyup", (e) => this.checkMatch(e));
+
+		// Play button on start menu
+		playButton.addEventListener("click", () => {
+			this.switch(this.startMenu, this.play)
+		});
+
+		// Play again + Menu buttons (end screen)
+		menuBtn.addEventListener("click", () => {
+			this.switch(this.endScreen, this.startMenu)
+		})
+
+		playAgainBtn.addEventListener("click", () => {
+			this.switch(this.endScreen, this.play);
+		})
+		//
+	}
+
+	show(elt) {
+		elt.style.visibility = "visible";
+		// elt.style.removeProperty("display");
+		const hasHiddenClass = elt.classList.replace("hidden", "visible");
+		if (!hasHiddenClass) elt.classList.add("visible");
+	}
+
+	hide(elt) {
+		const hasVisibleClass = elt.classList.replace("visible", "hidden");
+		if (!hasVisibleClass) elt.classList.add("hidden");
+
+		elt.addEventListener("transitionend", function tmp(e) {
+			// We don't care about children animations
+			if (e.target !== elt) return;
+
+			elt.style.visibility = "hidden";
+			elt.removeEventListener("transitionend", tmp);
+		})
+	}
+
+	switch(oldScreen, newScreen) {
+		this.hide(oldScreen);
+
+		const listener = () => {
+			// If newScreen is a function, execute it. Else, just show it
+			if (typeof newScreen === "function") newScreen.bind(this)();
+			else this.show(newScreen);
+
+			oldScreen.removeEventListener("transitionend", listener);
+		}
+
+		oldScreen.addEventListener("transitionend", listener);
+	}
+
+	showStartMenu() { // ============================================================ TO REMOVE (UPDATED AUTOMATICALLY AS SCORE CHANGES)
 		this.highScoreLabel.textContent = this.format(this.highScore);
 		this.prevScoreLabel.textContent = this.format(this.prevScore);
 
-		// if no timeout : bug (no fade in)
-		window.setTimeout(() => { this.startMenu.classList.add("visible") }, 10)
-
-
-		// Listen for click on #play-btn
-		const listener = () => {
-			this.startMenu.classList.replace("visible", "hide");
-			// Wait a bit before calling the play() method
-			window.setTimeout(() => this.play(), 200);
-			this.playButton.removeEventListener("click", listener);
-		}
-
-		// Play button click listener
-		this.playButton.addEventListener("click", listener);
-
+		this.show(this.startMenu);
 	}
 
 	play() {
@@ -63,11 +105,10 @@ class Game {
 		this.fallingDuration = 2 * this.rate;
 		this.score = 0;
 
-		this.mainInput.focus();
-		this.mainInput.addEventListener("keyup", this.onKeyUp);
-		document.addEventListener("click", this.prevFocusLoss);
+		document.addEventListener("click", this.prevFocusLoss); // ================== ON GAME UI?
 
-		this.gameUI.classList.add("visible");
+		this.show(this.gameUI);
+		this.mainInput.focus();
 
 		this.updateInterval(this.rate);
 	}
@@ -88,7 +129,7 @@ class Game {
 
 		// Increase difficulty
 		if (this.fallenWords >= 5) {
-			this.rate -= 400;
+			this.rate -= 500;
 			this.fallingDuration = 2 * this.rate;
 			this.fallenWords = 0;
 			this.scoreFactor++;
@@ -103,7 +144,7 @@ class Game {
 		wordElt.addEventListener("animationend", () => this.endGame());
 	}
 
-	incrementScore(amount) {
+	incrementScore(amount) { // ===================================================== EDIT INNERHTML OF ELEMENTS
 		this.score += amount;
 		this.scoreLabel.textContent = this.format(this.score);
 	}
@@ -133,7 +174,7 @@ class Game {
 			match = document.querySelector(`.word[data-word='${value}']`);
 			if (!match) throw "No match";
 		} catch (e) {
-			// When the user enters something weird (éç@_-...)
+			// For when the user enters something weird (éç@_-...)
 			// (or when there is no match)
 			this.mainInput.classList.add("invalid");
 			return;
@@ -159,7 +200,7 @@ class Game {
 			match.remove();
 		})
 
-		/* The score takes in account the currenct scoreFactor, the bottom 
+		/* The score takes in account the current scoreFactor, the bottom 
 		offset of the match and the length of the word. The closer to the 
 		top and the longer the word, the most points you get. */
 		this.incrementScore(this.scoreFactor * matchScore + 25 * value.length);
@@ -179,19 +220,22 @@ class Game {
 		this.endScores.finalScoreElt.textContent = this.format(this.score);
 		this.endScores.highScoreElt.textContent = this.format(highScore);
 
-		this.mainInput.removeEventListener("keyup", this.onKeyUp);
-		document.removeEventListener("click", this.prevFocusLoss);
+		document.removeEventListener("click", this.prevFocusLoss); // =============== LISTENER ON THIS.GAMEUI (NO NEED TO REMOVE IT ANYWHERE)
 
 		window.clearInterval(this.wordsFall);
 
-		this.gameUI.classList.remove("visible");
-
+		// Remove words + display end Screen
 		const listener = () => {
 			words.forEach(word => word.remove());
-			this.endScreen.classList.add("visible");
+
+			// Reset text content of score label (on game UI)
+			this.scoreLabel.textContent = 0;
+
+			this.show(this.endScreen)
 			this.gameUI.removeEventListener("transitionend", listener);
 		}
 
+		this.hide(this.gameUI);
 		this.gameUI.addEventListener("transitionend", listener);
 
 	}
@@ -238,6 +282,7 @@ const main = async () => {
 
 	// Start the game
 	const game = new Game(words);
+	game.setupListeners();
 	game.showStartMenu();
 
 	// Update the db in background
@@ -257,3 +302,6 @@ const main = async () => {
 
 // Launch main function
 main();
+
+
+// transitionend webkitTransitionEnd oTransitionEnd otransitionend

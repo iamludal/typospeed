@@ -27,17 +27,13 @@
     align-items: center;
     justify-content: center;
 
-    & button:first-child {
-      margin-right: 50px;
-    }
-
     & button {
-      height: 40px;
       border-radius: 10px;
       border: none;
-      box-shadow: inset 0 0 0 3px white;
+      box-shadow: inset 0 0 0 4px white;
       background: none;
-      padding: 0 25px;
+      margin: 0 10px;
+      padding: 15px 25px;
       color: inherit;
       transition: .2s;
       font-size: 1em;

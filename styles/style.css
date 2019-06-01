@@ -1,23 +1,25 @@
 #start-menu {
   opacity: 0;
-  pointer-events: none;
   -webkit-transition: .5s;
   transition: .5s;
 }
 
-#start-menu.hide #scores {
+#start-menu.hidden {
+  opacity: 0;
+}
+
+#start-menu.hidden #scores {
   -webkit-transform: translateY(-100%);
           transform: translateY(-100%);
 }
 
-#start-menu.hide #play-btn {
+#start-menu.hidden #play-btn {
   -webkit-transform: translate(-50%, -50%) scale(10);
           transform: translate(-50%, -50%) scale(10);
 }
 
 #start-menu.visible {
   opacity: 1;
-  pointer-events: all;
 }
 
 #scores {
@@ -62,7 +64,6 @@
 
 #game-ui.visible {
   opacity: 1;
-  pointer-events: all;
 }
 
 #game-ui.visible #bottom-bar {
@@ -70,9 +71,17 @@
           transform: translateX(-50%) translateY(0);
 }
 
-#game-ui {
+#game-ui.hidden {
   opacity: 0;
-  pointer-events: none;
+}
+
+#game-ui.hidden #bottom-bar {
+  -webkit-transform: translateX(-50%) translateY(100%);
+          transform: translateX(-50%) translateY(100%);
+}
+
+#game-ui {
+  position: relative;
   -webkit-transition: .3s;
   transition: .3s;
 }
@@ -269,18 +278,14 @@
           justify-content: center;
 }
 
-#end-screen .buttons button:first-child {
-  margin-right: 50px;
-}
-
 #end-screen .buttons button {
-  height: 40px;
   border-radius: 10px;
   border: none;
-  -webkit-box-shadow: inset 0 0 0 3px white;
-          box-shadow: inset 0 0 0 3px white;
+  -webkit-box-shadow: inset 0 0 0 4px white;
+          box-shadow: inset 0 0 0 4px white;
   background: none;
-  padding: 0 25px;
+  margin: 0 10px;
+  padding: 15px 25px;
   color: inherit;
   -webkit-transition: .2s;
   transition: .2s;
