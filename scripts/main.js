@@ -14,8 +14,8 @@ class Game {
 		this.mainInput = document.getElementById("input");
 		this.playground = document.getElementById("playground");
 		this.scoreLabel = document.querySelector("#score-label span");
-		this.highScoreLabel = document.querySelector(".high-score span");
-		this.prevScoreLabel = document.querySelector(".prev-score span");
+		this.highScoreLabels = document.querySelectorAll(".high-score span");
+		this.prevScoreLabels = document.querySelectorAll(".prev-score span");
 		this.endScores = {
 			finalScoreElt: document.querySelector("#final-score span"),
 			highScoreElt: document.querySelector("#high-score span")
@@ -30,6 +30,13 @@ class Game {
 		window.addEventListener("resize", () => {
 			this.vpWidth = window.innerWidth;
 		})
+
+		// Display start menu
+		this.setupListeners();
+	}
+
+	init() {
+		this.show(this.startMenu);
 	}
 
 	setupListeners() {
@@ -39,6 +46,9 @@ class Game {
 
 		// Input listener
 		this.mainInput.addEventListener("keyup", (e) => this.checkMatch(e));
+
+		// Prevent focus loss
+		this.playground.addEventListener("click", () => this.mainInput.focus())
 
 		// Play button on start menu
 		playButton.addEventListener("click", () => {
@@ -57,8 +67,11 @@ class Game {
 	}
 
 	show(elt) {
+		this.updateLabels();
+
 		elt.style.visibility = "visible";
-		// elt.style.removeProperty("display");
+		elt.style.removeProperty("position");
+
 		const hasHiddenClass = elt.classList.replace("hidden", "visible");
 		if (!hasHiddenClass) elt.classList.add("visible");
 	}
@@ -71,7 +84,10 @@ class Game {
 			// We don't care about children animations
 			if (e.target !== elt) return;
 
+			// Same as display: none, but without the bugs
 			elt.style.visibility = "hidden";
+			elt.style.position = "absolute";
+
 			elt.removeEventListener("transitionend", tmp);
 		})
 	}
@@ -81,6 +97,7 @@ class Game {
 
 		const listener = () => {
 			// If newScreen is a function, execute it. Else, just show it
+			// Bind => to keep the [this] of the class
 			if (typeof newScreen === "function") newScreen.bind(this)();
 			else this.show(newScreen);
 
@@ -90,11 +107,9 @@ class Game {
 		oldScreen.addEventListener("transitionend", listener);
 	}
 
-	showStartMenu() { // ============================================================ TO REMOVE (UPDATED AUTOMATICALLY AS SCORE CHANGES)
-		this.highScoreLabel.textContent = this.format(this.highScore);
-		this.prevScoreLabel.textContent = this.format(this.prevScore);
-
-		this.show(this.startMenu);
+	updateLabels() {
+		this.prevScoreLabels.forEach(elt => elt.innerHTML = this.prevScore);
+		this.highScoreLabels.forEach(elt => elt.innerHTML = this.highScore);
 	}
 
 	play() {
@@ -105,10 +120,10 @@ class Game {
 		this.fallingDuration = 2 * this.rate;
 		this.score = 0;
 
-		document.addEventListener("click", this.prevFocusLoss); // ================== ON GAME UI?
-
+		// Clear input value, show playing screen and focus input
+		this.mainInput.value = "";
 		this.show(this.gameUI);
-		this.mainInput.focus();
+		window.setTimeout(() => this.mainInput.focus(), 50);
 
 		this.updateInterval(this.rate);
 	}
@@ -216,11 +231,11 @@ class Game {
 		localStorage.setItem("prevScore", this.score);
 		localStorage.setItem("highScore", highScore);
 
-		// Update scores text content of the end screen
-		this.endScores.finalScoreElt.textContent = this.format(this.score);
-		this.endScores.highScoreElt.textContent = this.format(highScore);
+		// Update values
+		this.highScore = highScore;
+		this.prevScore = this.score;
 
-		document.removeEventListener("click", this.prevFocusLoss); // =============== LISTENER ON THIS.GAMEUI (NO NEED TO REMOVE IT ANYWHERE)
+		this.updateLabels();
 
 		window.clearInterval(this.wordsFall);
 
@@ -284,8 +299,7 @@ const main = async () => {
 
 	// Start the game
 	const game = new Game(words);
-	game.setupListeners();
-	game.showStartMenu();
+	game.init();
 
 	// Update the db in background
 	fetch("https://gist.githubusercontent.com/luddoz-c/8f189ae9648719b6b98251927b0dc81b/raw/")
