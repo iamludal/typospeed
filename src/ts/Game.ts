@@ -4,10 +4,10 @@ import { GameMachine } from './types'
 
 class Game {
 
-    private _fallTime = 2 * 1000
+    private _fallTime = 2 * 1000 // drop a word every 2 seconds
     private _score = 0;
     private _wordsList: words;
-    private _fallingWords: WordProps[] = []
+    private _fallingWords: Array<WordProps> = []
     private _wordsListener: Function
     private _scoreListener: Function
     private _interval: number
@@ -23,11 +23,11 @@ class Game {
         this._interval = setInterval(this.addWord.bind(this), this._fallTime)
     }
 
-    public get fallingWords(): WordProps[] {
+    public get fallingWords(): Array<WordProps> {
         return this._fallingWords
     }
 
-    public set fallingWords(fallingWords: WordProps[]) {
+    public set fallingWords(fallingWords: Array<WordProps>) {
         this._fallingWords = fallingWords
         this._wordsListener(fallingWords)
     }
@@ -106,7 +106,7 @@ class Game {
         return Math.round(Math.random() * delta) + lowerBound
     }
 
-    public registerWordsListener(listener: (word: WordProps[]) => any): void {
+    public registerWordsListener(listener: (word: Array<WordProps>) => any): void {
         this._wordsListener = listener;
     }
 

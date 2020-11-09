@@ -11,9 +11,9 @@
     let typedWord: string = "";
     let input: HTMLInputElement;
     let invalidInput: Boolean = false;
-    let fallingWords: WordProps[] = [];
+    let fallingWords: Array<WordProps> = [];
 
-    game.registerWordsListener((updatedList: WordProps[]) => {
+    game.registerWordsListener((updatedList: Array<WordProps>) => {
         fallingWords = updatedList;
     });
 

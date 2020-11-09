@@ -8,7 +8,7 @@ export interface WordProps {
     [otherProp: string]: any
 }
 
-export type words = string[]
+export type words = Array<string>
 
 export interface Scores {
     best: number,
