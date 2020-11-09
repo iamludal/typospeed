@@ -41,7 +41,8 @@ class Game {
         this._scoreListener(x)
     }
 
-    public handle(word: string): Boolean {
+    public handle(typedWord: string): Boolean {
+        const word = typedWord.toLocaleLowerCase()
         const valid = this.isValid(word)
 
         if (valid) {
