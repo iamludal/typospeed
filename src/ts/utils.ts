@@ -1,6 +1,6 @@
 import type { Scores, words } from "./types";
 
-const WORDS_URL = "/assets/data/words.json"
+const WORDS_URL = "assets/data/words.json"
 
 /**
  * Get the words list (from local storage or url), and store it if not stored
