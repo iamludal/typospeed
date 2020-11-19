@@ -4,6 +4,8 @@
     import type { WordProps } from "../ts/types";
     import Word from "./Word.svelte";
     import { fade } from "svelte/transition";
+    import MdStars from "svelte-icons/md/MdStars.svelte";
+    import Icon from "./Icon.svelte";
 
     export let game: Game;
 
@@ -97,7 +99,13 @@
         {/each}
     </div>
     <div class="bottom-bar">
-        <div class="score">Score: {score}</div>
+        <div class="score">
+            <Icon>
+                <MdStars />
+            </Icon>
+            Score:
+            {score}
+        </div>
         <input
             class="input"
             type="text"

@@ -4,6 +4,7 @@
     import PlayCircle from "svelte-icons/md/MdPlayArrow.svelte";
     import MdMenu from "svelte-icons/md/MdMenu.svelte";
     import FaRegSadCry from "svelte-icons/fa/FaRegSadCry.svelte";
+    import Icon from "./Icon.svelte";
 
     export let scores: Scores;
 
@@ -43,7 +44,9 @@
 
 <div class="wrapper">
     <h1>
-        <FaRegSadCry />
+        <Icon>
+            <FaRegSadCry />
+        </Icon>
         Game Over!
     </h1>
 
@@ -52,11 +55,15 @@
 
     <div>
         <button class="btn" on:click={() => dispatch('menu')}>
-            <MdMenu />
+            <Icon>
+                <MdMenu />
+            </Icon>
             Menu
         </button>
         <button class="btn" on:click={() => dispatch('playagain')}>
-            <PlayCircle />
+            <Icon>
+                <PlayCircle />
+            </Icon>
             Play again
         </button>
     </div>

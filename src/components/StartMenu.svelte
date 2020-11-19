@@ -4,6 +4,7 @@
     import { createEventDispatcher } from "svelte";
     import PlayCircle from "svelte-icons/md/MdPlayArrow.svelte";
     import FaMedal from "svelte-icons/fa/FaMedal.svelte";
+    import Icon from "./Icon.svelte";
 
     export let scores = getScores();
 
@@ -58,13 +59,17 @@
 <div id="start-menu" class:hidden transition:fade={{ duration: 500 }}>
     <div id="scores">
         <div>
-            <FaMedal />
+            <Icon>
+                <FaMedal />
+            </Icon>
             Best score:
-            {best}
+            <strong>{best}</strong>
         </div>
-        <div>Last score: {last}</div>
+        <div>Last score: <strong>{last}</strong></div>
     </div>
     <button id="play" on:click={() => dispatch('start')}>
-        <PlayCircle />
+        <Icon>
+            <PlayCircle />
+        </Icon>
     </button>
 </div>
