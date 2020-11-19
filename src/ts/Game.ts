@@ -62,6 +62,7 @@ class Game {
         const index = this.fallingWords.findIndex(w => w.value == word)
         const toRemove = this.fallingWords[index]
         this.fallingWords = this.fallingWords.filter((_, i) => i != index)
+        clearInterval(toRemove.timeout)
         return toRemove
     }
 
