@@ -30,7 +30,7 @@
 </script>
 
 {#if state == 'IDLE'}
-    <StartMenu on:click={() => game.start()} />
+    <StartMenu on:start={() => game.start()} />
 {:else if state == 'PLAYING'}
     <Playground {game} />
 {:else if state == 'FINISHED'}

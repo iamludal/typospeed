@@ -1,10 +1,12 @@
 <script lang="ts">
     import { fade } from "svelte/transition";
     import { getScores } from "../ts/utils";
+    import { createEventDispatcher } from "svelte";
 
     export let scores = getScores();
 
     const { best, last } = scores;
+    const dispatch = createEventDispatcher();
 
     let hidden = false;
 </script>
@@ -56,5 +58,5 @@
         <div>Best score: {best}</div>
         <div>Last score: {last}</div>
     </div>
-    <button id="play" on:click>PLAY</button>
+    <button id="play" on:click={() => dispatch('start')}>PLAY</button>
 </div>
