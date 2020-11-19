@@ -26,6 +26,7 @@
     "@tsconfig/svelte": "^1.0.0"
   },
   "dependencies": {
-    "robot3": "^0.2.18"
+    "robot3": "^0.2.18",
+    "svelte-icons": "^2.1.0"
   }
 }

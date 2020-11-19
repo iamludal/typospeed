@@ -1,6 +1,9 @@
 <script lang="ts">
     import type { Scores } from "../ts/types";
     import { createEventDispatcher } from "svelte";
+    import PlayCircle from "svelte-icons/md/MdPlayArrow.svelte";
+    import MdMenu from "svelte-icons/md/MdMenu.svelte";
+    import FaRegSadCry from "svelte-icons/fa/FaRegSadCry.svelte";
 
     export let scores: Scores;
 
@@ -39,13 +42,22 @@
 </style>
 
 <div class="wrapper">
-    <h1>Game Over!</h1>
+    <h1>
+        <FaRegSadCry />
+        Game Over!
+    </h1>
 
     <h2>Your score: {last}</h2>
     <p>Best score: {best}</p>
 
     <div>
-        <button class="btn" on:click={() => dispatch('menu')}>Menu</button>
-        <button class="btn" on:click={() => dispatch('playagain')}>Play again</button>
+        <button class="btn" on:click={() => dispatch('menu')}>
+            <MdMenu />
+            Menu
+        </button>
+        <button class="btn" on:click={() => dispatch('playagain')}>
+            <PlayCircle />
+            Play again
+        </button>
     </div>
 </div>

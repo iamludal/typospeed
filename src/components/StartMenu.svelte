@@ -2,6 +2,8 @@
     import { fade } from "svelte/transition";
     import { getScores } from "../ts/utils";
     import { createEventDispatcher } from "svelte";
+    import PlayCircle from "svelte-icons/md/MdPlayArrow.svelte";
+    import FaMedal from "svelte-icons/fa/FaMedal.svelte";
 
     export let scores = getScores();
 
@@ -36,16 +38,16 @@
     }
 
     #play {
+        display: flex;
         position: absolute;
         background: var(--color-secondary-transparent);
-        width: 100px;
-        height: 100px;
+        padding: 20px;
         border-radius: var(--radius-high);
         top: 50%;
         left: 50%;
         transform: translate(-50%, -50%);
         transition: var(--transition);
-        font-size: 1.2em;
+        font-size: 2em;
     }
 
     #play:hover {
@@ -55,8 +57,14 @@
 
 <div id="start-menu" class:hidden transition:fade={{ duration: 500 }}>
     <div id="scores">
-        <div>Best score: {best}</div>
+        <div>
+            <FaMedal />
+            Best score:
+            {best}
+        </div>
         <div>Last score: {last}</div>
     </div>
-    <button id="play" on:click={() => dispatch('start')}>PLAY</button>
+    <button id="play" on:click={() => dispatch('start')}>
+        <PlayCircle />
+    </button>
 </div>
