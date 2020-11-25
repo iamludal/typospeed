@@ -5,12 +5,13 @@ import { GameMachine } from './types'
 class Game {
 
     private _fallTime = 2 * 1000 // drop a word every 2 seconds
-    private _score = 0;
-    private _wordsList: words;
+    private _duration = 10 // word time (in sec) to reach bottom of screen
+    private _score = 0
+    private _wordsList: words
     private _fallingWords: Array<WordProps> = []
     private _wordsListener: Function
     private _scoreListener: Function
-    private _interval: number
+    private _intervals: { [key: string]: number } = {}
     private state: Service<typeof GameMachine>
 
     constructor(wordsList: words, stateListener: OnChangeListener) {
@@ -18,9 +19,26 @@ class Game {
         this.state = interpret(GameMachine, stateListener)
     }
 
-    public start() {
+    public start(): void {
         this.state.send('start')
-        this._interval = setInterval(this.addWord.bind(this), this._fallTime)
+        this.updateFallInterval()
+
+        this._intervals.difficulty = setInterval(() => {
+            this.increaseDifficulty()
+        }, 20 * 1000)
+    }
+
+    private increaseDifficulty(): void {
+        this._fallTime -= 200
+        this._duration -= .5
+        this.updateFallInterval()
+    }
+
+    private updateFallInterval(): void {
+        clearInterval(this._intervals.fall)
+        this._intervals.fall = setInterval(() => {
+            this.addWord()
+        }, this._fallTime)
     }
 
     public get fallingWords(): Array<WordProps> {
@@ -54,11 +72,11 @@ class Game {
         return valid
     }
 
-    public isValid(word: string): Boolean {
+    private isValid(word: string): Boolean {
         return this.fallingWords.some(w => w.value == word)
     }
 
-    public removeWord(word: string): WordProps {
+    private removeWord(word: string): WordProps {
         const index = this.fallingWords.findIndex(w => w.value == word)
         const toRemove = this.fallingWords[index]
         this.fallingWords = this.fallingWords.filter((_, i) => i != index)
@@ -79,24 +97,25 @@ class Game {
         const i = Math.floor(Math.random() * this._wordsList.length)
         const value = this._wordsList[i]
         const x = this.randomPos()
-        const duration = 10
+        const duration = this._duration
 
         return {
             x,
             value,
             duration,
             id: value + x,
-            timeout: setTimeout(this.loose.bind(this), duration * 1000)
+            timeout: setTimeout(() => this.loose(), duration * 1000)
         }
     }
 
     private loose(): void {
         this.state.send('end')
-        clearInterval(this._interval)
+
+        for (let interval of Object.values(this._intervals))
+            clearInterval(interval)
 
         for (let word of this.fallingWords)
             this.removeWord(word.value)
-
     }
 
     private randomPos(): number {
@@ -109,11 +128,11 @@ class Game {
     }
 
     public registerWordsListener(listener: (word: Array<WordProps>) => any): void {
-        this._wordsListener = listener;
+        this._wordsListener = listener
     }
 
     public registerScoreListener(listener: (score: number) => any): void {
-        this._scoreListener = listener;
+        this._scoreListener = listener
     }
 }
 
