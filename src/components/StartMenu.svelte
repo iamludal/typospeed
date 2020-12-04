@@ -8,6 +8,9 @@
     import Icon from "./Icon.svelte";
     import type { Scores } from "../ts/types";
     import IoMdHelpCircle from "svelte-icons/io/IoMdHelpCircle.svelte";
+    import FaGithubAlt from "svelte-icons/fa/FaGithubAlt.svelte";
+
+    const GITHUB_LINK = "https://github.com/iamludal/typospeed";
 
     export let scores: Scores = getScores();
     let isNew: Boolean = userIsNew();
@@ -59,17 +62,24 @@
         transform: translate(-50%, -50%) scale(1.1);
     }
 
-    .help {
+    .buttons {
         top: 1rem;
         right: 1rem;
         position: absolute;
-        font-size: 2em;
-        opacity: 0.6;
-        transition: var(--transition);
-        background: none;
+        display: flex;
+        align-items: center;
     }
 
-    .help:hover {
+    .buttons .btn {
+        opacity: 0.6;
+        font-size: 2em;
+        color: var(--color-secondary);
+        transition: var(--transition);
+        background: none;
+        margin: 0 0.2em;
+    }
+
+    .buttons .btn:hover {
         opacity: 0.8;
         transform: scale(1.05);
     }
@@ -98,14 +108,25 @@
                 isNew = false;
             }} />
     {:else}
-        <button
-            class="help"
-            title="Click me for help"
-            on:click={() => (isNew = true)}
-            transition:fade={{ duration: 200 }}>
-            <Icon>
-                <IoMdHelpCircle />
-            </Icon>
-        </button>
+        <div class="buttons" transition:fade={{ duration: 200 }}>
+            <a
+                href={GITHUB_LINK}
+                target="_blank"
+                rel="noreferrer noopener"
+                title="Star me on GitHub"
+                class="btn">
+                <Icon>
+                    <FaGithubAlt />
+                </Icon>
+            </a>
+            <button
+                class="help btn"
+                title="Click me for help"
+                on:click={() => (isNew = true)}>
+                <Icon>
+                    <IoMdHelpCircle />
+                </Icon>
+            </button>
+        </div>
     {/if}
 </div>
