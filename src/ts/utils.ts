@@ -1,4 +1,5 @@
-import type { Scores, words } from "./types";
+import type { Scores, words } from "./types"
+import { v4 as uuidv4, validate } from "uuid"
 
 const WORDS_URL = "assets/data/words.json"
 
@@ -8,14 +9,14 @@ const WORDS_URL = "assets/data/words.json"
  * @returns a Promise, which resolves in the words list (array of string)
  */
 export async function getWords(): Promise<words> {
-    let wordsList: words = JSON.parse(localStorage.getItem('words'));
+    let wordsList: words = JSON.parse(localStorage.getItem('words'))
 
     if (!wordsList) {
-        wordsList = await fetchWordsList();
-        localStorage.setItem('words', JSON.stringify(wordsList));
+        wordsList = await fetchWordsList()
+        localStorage.setItem('words', JSON.stringify(wordsList))
     }
 
-    return wordsList;
+    return wordsList
 }
 
 /**
@@ -24,7 +25,7 @@ export async function getWords(): Promise<words> {
  * @returns a Promise, which resolves in the words list (array of string)
  */
 async function fetchWordsList(): Promise<words> {
-    return fetch(WORDS_URL).then(data => data.json());
+    return fetch(WORDS_URL).then(data => data.json())
 }
 
 /**
@@ -49,6 +50,18 @@ export function saveScore(score: number): void {
     const localBest = parseInt(localStorage.getItem('best')) || 0
     const best = Math.max(score, localBest)
 
-    localStorage.setItem('best', best.toString());
+    localStorage.setItem('best', best.toString())
     localStorage.setItem('last', score.toString())
+}
+
+/**
+ * Return true if the user is new (opening the game for the first time)
+ */
+export function userIsNew(): Boolean {
+    const uuid = localStorage.getItem('uuid') || ''
+    return !validate(uuid)
+}
+
+export function registerUser(): void {
+    localStorage.setItem('uuid', uuidv4())
 }

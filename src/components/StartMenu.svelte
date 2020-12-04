@@ -1,12 +1,16 @@
 <script lang="ts">
     import { fade } from "svelte/transition";
-    import { getScores } from "../ts/utils";
+    import { getScores, userIsNew, registerUser } from "../ts/utils";
     import { createEventDispatcher } from "svelte";
     import PlayCircle from "svelte-icons/md/MdPlayArrow.svelte";
     import FaMedal from "svelte-icons/fa/FaMedal.svelte";
+    import Rules from "./Rules.svelte";
     import Icon from "./Icon.svelte";
+    import type { Scores } from "../ts/types";
+    import IoMdHelpCircle from "svelte-icons/io/IoMdHelpCircle.svelte";
 
-    export let scores = getScores();
+    export let scores: Scores = getScores();
+    let isNew: Boolean = userIsNew();
 
     const { best, last } = scores;
     const dispatch = createEventDispatcher();
@@ -54,6 +58,21 @@
     #play:hover {
         transform: translate(-50%, -50%) scale(1.1);
     }
+
+    .help {
+        top: 1rem;
+        right: 1rem;
+        position: absolute;
+        font-size: 2em;
+        opacity: 0.6;
+        transition: var(--transition);
+        background: none;
+    }
+
+    .help:hover {
+        opacity: 0.8;
+        transform: scale(1.05);
+    }
 </style>
 
 <div id="start-menu" class:hidden transition:fade={{ duration: 500 }}>
@@ -72,4 +91,21 @@
             <PlayCircle />
         </Icon>
     </button>
+    {#if isNew}
+        <Rules
+            on:click={() => {
+                registerUser();
+                isNew = false;
+            }} />
+    {:else}
+        <button
+            class="help"
+            title="Click me for help"
+            on:click={() => (isNew = true)}
+            transition:fade={{ duration: 200 }}>
+            <Icon>
+                <IoMdHelpCircle />
+            </Icon>
+        </button>
+    {/if}
 </div>
