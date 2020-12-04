@@ -42,7 +42,7 @@
     }
 
     .playground.invalid {
-        animation: invalid 0.2s 2 alternate backwards;
+        animation: invalid 0.2s 2 alternate backwards linear;
     }
 
     .words-container {
