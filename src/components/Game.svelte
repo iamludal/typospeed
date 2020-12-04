@@ -16,26 +16,23 @@
         if (state == "FINISHED") saveScore(game.score);
     };
 
-    let game = new Game(wordsList, handleStateChange);
+    let game;
 
-    const handleMenu = () => {
-        state = "IDLE";
-        game = new Game(wordsList, handleStateChange);
-    };
+    const setState = (newState: States) => (state = newState);
 
-    const handlePlayAgain = () => {
+    const start = () => {
         game = new Game(wordsList, handleStateChange);
         game.start();
     };
 </script>
 
 {#if state == 'IDLE'}
-    <StartMenu on:start={() => game.start()} />
+    <StartMenu on:start={start} />
 {:else if state == 'PLAYING'}
     <Playground {game} />
 {:else if state == 'FINISHED'}
     <EndScreen
         scores={getScores()}
-        on:menu={handleMenu}
-        on:playagain={handlePlayAgain} />
+        on:menu={() => setState('IDLE')}
+        on:playagain={start} />
 {/if}
