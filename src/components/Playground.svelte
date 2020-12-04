@@ -41,6 +41,10 @@
         height: 100vh;
     }
 
+    .playground.invalid {
+        animation: invalid 0.2s 2 alternate backwards;
+    }
+
     .words-container {
         height: 100vh;
         width: 100vw;
@@ -67,32 +71,23 @@
         transition: transform var(--transition);
     }
 
-    .input.invalid {
-        animation: invalid 0.2s forwards linear;
-    }
-
     .score {
         opacity: 0.9;
         padding: 0.5em;
     }
 
     @keyframes invalid {
-        0% {
-            transform: translateX(0);
-        }
-        25% {
-            transform: translateX(-10%);
-        }
-        75% {
-            transform: translateX(10%);
-        }
+        75%,
         100% {
-            transform: translateX(0);
+            background-color: #db3434;
         }
     }
 </style>
 
-<div class="playground" transition:fade={{ duration: 500 }}>
+<div
+    class="playground"
+    class:invalid={invalidInput}
+    transition:fade={{ duration: 500 }}>
     <div class="words-container">
         {#each fallingWords as props (props.id)}
             <Word {props} />
@@ -113,7 +108,6 @@
             bind:value={typedWord}
             bind:this={input}
             on:keyup={handleKeyUp}
-            on:blur={handleBlur}
-            class:invalid={invalidInput} />
+            on:blur={handleBlur} />
     </div>
 </div>
