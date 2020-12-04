@@ -75,7 +75,7 @@
     }
 </style>
 
-<div id="start-menu" class:hidden transition:fade={{ duration: 500 }}>
+<div id="start-menu" class:hidden transition:fade={{ duration: 400 }}>
     <div id="scores">
         <div>
             <Icon>

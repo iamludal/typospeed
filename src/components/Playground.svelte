@@ -87,7 +87,7 @@
 <div
     class="playground"
     class:invalid={invalidInput}
-    transition:fade={{ duration: 500 }}>
+    transition:fade={{ duration: 400 }}>
     <div class="words-container">
         {#each fallingWords as props (props.id)}
             <Word {props} />
