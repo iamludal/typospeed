@@ -30,8 +30,8 @@
     const handleKeyUp = (e: KeyboardEvent) => {
         invalidInput = false;
         if (e.key == "Enter") {
-            if (game.handle(typedWord)) typedWord = "";
-            else invalidInput = true;
+            if (!game.handle(typedWord)) invalidInput = true;
+            typedWord = "";
         }
     };
 </script>
