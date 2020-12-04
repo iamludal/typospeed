@@ -1,6 +1,7 @@
 <script lang="ts">
     import type { Scores } from "../ts/types";
     import { createEventDispatcher } from "svelte";
+    import { fade } from "svelte/transition";
     import PlayCircle from "svelte-icons/md/MdPlayArrow.svelte";
     import MdMenu from "svelte-icons/md/MdMenu.svelte";
     import FaRegSadCry from "svelte-icons/fa/FaRegSadCry.svelte";
@@ -42,7 +43,7 @@
     }
 </style>
 
-<div class="wrapper">
+<div class="wrapper" out:fade={{ duration: 200 }} in:fade={{ duration: 800 }}>
     <h1>
         <Icon>
             <FaRegSadCry />
