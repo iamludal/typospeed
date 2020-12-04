@@ -26,12 +26,14 @@
     onMount(() => handleBlur());
 
     const handleBlur = () => input.focus();
+    const resetInput = () => (typedWord = "");
+    const setValidInput = () => (invalidInput = false);
 
     const handleKeyUp = (e: KeyboardEvent) => {
-        invalidInput = false;
+        setValidInput();
         if (e.key == "Enter") {
-            if (!game.handle(typedWord)) invalidInput = true;
-            typedWord = "";
+            invalidInput = !game.handle(typedWord);
+            resetInput();
         }
     };
 </script>
