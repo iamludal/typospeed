@@ -1,0 +1,32 @@
+@import '../Vars';
+
+main {
+  background: $color-primary;
+  color: $color-secondary;
+  overflow: hidden;
+  height: 100%;
+}
+
+* {
+  box-sizing: border-box;
+  color: $color-secondary;
+  font-family: $font-family sans-serif;
+}
+
+button {
+  cursor: pointer;
+  background: none;
+}
+
+button, input  {
+  outline: none;
+  border: none;
+}
+
+.error {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  text-align: center;
+}

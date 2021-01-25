@@ -1,0 +1,34 @@
+@import './Vars';
+
+.word {
+  position: absolute;
+  padding: 0.8em 1em;
+  text-transform: uppercase;
+  user-select: none;
+  animation: falling forwards linear;
+  color: $color-secondary;
+
+  &::after {
+    content: "";
+    position: absolute;
+    background: $color-secondary;
+    opacity: 0.1;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    border-radius: $radius-high;
+
+  }
+}
+
+@keyframes falling {
+  from {
+      top: 0;
+      transform: translateY(-100%);
+  }
+  to {
+      top: 100%;
+      transform: translateY(0);
+  }
+}

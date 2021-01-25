@@ -9,11 +9,14 @@ const WORDS_URL = "assets/data/words.json"
  * @returns a Promise, which resolves in the words list (array of string)
  */
 export async function getWords(): Promise<words> {
-    let wordsList: words = JSON.parse(localStorage.getItem('words'))
+    let storage = localStorage.getItem('words')
+    let wordsList: words
 
-    if (!wordsList) {
+    if (!storage) {
         wordsList = await fetchWordsList()
         localStorage.setItem('words', JSON.stringify(wordsList))
+    } else {
+        wordsList = JSON.parse(storage)
     }
 
     return wordsList
@@ -35,8 +38,8 @@ async function fetchWordsList(): Promise<words> {
  * @returns the scores
  */
 export function getScores(): Scores {
-    const last = parseInt(localStorage.getItem('last')) || 0
-    const best = parseInt(localStorage.getItem('best')) || last
+    const last = parseInt(localStorage.getItem('last') || '') || 0
+    const best = parseInt(localStorage.getItem('best') || '') || last
 
     return { best, last }
 }
@@ -47,7 +50,7 @@ export function getScores(): Scores {
  * @param score the score
  */
 export function saveScore(score: number): void {
-    const localBest = parseInt(localStorage.getItem('best')) || 0
+    const localBest = parseInt(localStorage.getItem('best') || '') || 0
     const best = Math.max(score, localBest)
 
     localStorage.setItem('best', best.toString())

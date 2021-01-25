@@ -1,5 +1,5 @@
-import type { OnChangeListener, WordProps, words } from "./types"
-import { interpret, Service } from 'robot3'
+import type { GameInterpreter, stateChangeListener, WordProps, words } from "./types"
+import { interpret } from 'xstate'
 import { GameMachine } from './types'
 
 class Game {
@@ -9,34 +9,36 @@ class Game {
     private _score = 0
     private _wordsList: words
     private _fallingWords: Array<WordProps> = []
-    private _wordsListener: Function
-    private _scoreListener: Function
+    private _wordsListener?: Function
+    private _scoreListener?: Function
     private _intervals: { [key: string]: number } = {}
-    private state: Service<typeof GameMachine>
+    private state: GameInterpreter
 
-    constructor(wordsList: words, stateListener: OnChangeListener) {
+    constructor(wordsList: words, stateListener: stateChangeListener) {
         this._wordsList = wordsList
-        this.state = interpret(GameMachine, stateListener)
+        this.state = interpret(GameMachine)
+            .onTransition(stateListener)
+            .start()
     }
 
     public start(): void {
         this.state.send('start')
         this.updateFallInterval()
 
-        this._intervals.difficulty = setInterval(() => {
+        this._intervals.difficulty = window.setInterval(() => {
             this.increaseDifficulty()
         }, 20 * 1000)
     }
 
     private increaseDifficulty(): void {
         this._fallTime -= 200
-        this._duration -= .5
+        this._duration -= .8
         this.updateFallInterval()
     }
 
     private updateFallInterval(): void {
         clearInterval(this._intervals.fall)
-        this._intervals.fall = setInterval(() => {
+        this._intervals.fall = window.setInterval(() => {
             this.addWord()
         }, this._fallTime)
     }
@@ -47,7 +49,9 @@ class Game {
 
     public set fallingWords(fallingWords: Array<WordProps>) {
         this._fallingWords = fallingWords
-        this._wordsListener(fallingWords)
+
+        if (this._wordsListener)
+            this._wordsListener(fallingWords)
     }
 
     public get score(): number {
@@ -56,7 +60,9 @@ class Game {
 
     public set score(x: number) {
         this._score = x
-        this._scoreListener(x)
+
+        if (this._scoreListener)
+            this._scoreListener(x)
     }
 
     public handle(typedWord: string): Boolean {

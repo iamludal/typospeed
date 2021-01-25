@@ -1,33 +1,40 @@
 {
-  "name": "svelte-app",
+  "name": "typospeed",
   "version": "1.0.0",
   "scripts": {
-    "build": "rollup -c",
-    "dev": "rollup -c -w",
-    "start": "sirv public",
-    "validate": "svelte-check",
+    "start": "react-scripts start",
+    "build": "react-scripts build",
     "predeploy": "npm run build",
     "deploy": "gh-pages -d public"
   },
   "devDependencies": {
-    "@rollup/plugin-commonjs": "^14.0.0",
-    "@rollup/plugin-node-resolve": "^8.0.0",
-    "rollup": "^2.3.4",
-    "rollup-plugin-livereload": "^2.0.0",
-    "rollup-plugin-svelte": "^6.0.0",
-    "rollup-plugin-terser": "^7.0.0",
-    "sirv-cli": "^1.0.8",
-    "svelte": "^3.0.0",
-    "svelte-check": "^1.0.0",
-    "svelte-preprocess": "^4.0.0",
-    "@rollup/plugin-typescript": "^6.0.0",
     "typescript": "^3.9.3",
-    "tslib": "^2.0.0",
-    "@tsconfig/svelte": "^1.0.0"
+    "tslib": "^2.0.0"
   },
   "dependencies": {
-    "robot3": "^0.2.18",
-    "svelte-icons": "^2.1.0",
-    "uuid": "^8.3.1"
+    "@types/react": "^17.0.0",
+    "@types/react-dom": "^17.0.0",
+    "@types/styled-jsx": "^2.2.8",
+    "@types/uuid": "^8.3.0",
+    "@xstate/react": "^1.0.3",
+    "node-sass": "^4.0.0",
+    "react": "^17.0.1",
+    "react-dom": "^17.0.1",
+    "react-scripts": "^4.0.1",
+    "styled-jsx": "^3.3.2",
+    "uuid": "^8.3.1",
+    "xstate": "^4.14.1"
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
   }
 }

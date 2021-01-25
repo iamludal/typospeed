@@ -1,10 +1,11 @@
-import { transition, state, createMachine, InterpretOnChangeFunction, Service } from 'robot3'
+import { Machine, Interpreter, AnyEventObject, State } from 'xstate'
+import { StateListener } from 'xstate/lib/interpreter'
 
 export interface WordProps {
-    readonly value: string,
-    readonly x: number,
-    readonly duration: number,
-    readonly id: string,
+    value: string,
+    x: number,
+    duration: number,
+    id: string,
     [otherProp: string]: any
 }
 
@@ -15,21 +16,23 @@ export interface Scores {
     last: number
 }
 
-export type States = typeof GameMachine.current
-export type GameService = Service<typeof GameMachine>
-export type OnChangeListener = InterpretOnChangeFunction<typeof GameMachine>
+export type GameStates = 'IDLE' | 'PLAYING' | 'OVER'
 
-export const GameMachine = createMachine('IDLE', {
-    IDLE: state(
-        transition('start', 'PLAYING')
-    ),
-    PLAYING: state(
-        transition('pause', 'PAUSED'),
-        transition('end', 'FINISHED')
-    ),
-    PAUSED: state(
-        transition('resume', 'PLAY')
-    ),
-    FINISHED: state()
+export const GameMachine = Machine({
+    id: 'game',
+    initial: 'IDLE',
+    states: {
+        IDLE: {
+            on: { start: 'PLAYING' }
+        },
+        PLAYING: {
+            on: { end: 'OVER' }
+        },
+        OVER: {}
+    }
 })
 
+export type GameInterpreter = Interpreter<typeof GameMachine>
+export type stateChangeListener = StateListener<any, AnyEventObject>
+
+console.log(GameMachine.states)
