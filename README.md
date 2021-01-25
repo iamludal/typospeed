@@ -10,6 +10,8 @@ words that are falling on your screen, as soon as possible!
 
 - [ ] Multilang support
 - [ ] Leaderboard
+- [ ] Add sounds
+- [ ] Support keyboard navigation
 
 
 # 📸 Screenshots
