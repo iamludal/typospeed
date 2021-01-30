@@ -1,14 +1,6 @@
 import { Machine, Interpreter, AnyEventObject, State } from 'xstate'
 import { StateListener } from 'xstate/lib/interpreter'
 
-export interface WordProps {
-    value: string,
-    x: number,
-    duration: number,
-    id: string,
-    [otherProp: string]: any
-}
-
 export type words = Array<string>
 
 export interface Scores {

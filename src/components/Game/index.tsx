@@ -6,7 +6,7 @@ interface props {
     wordsList: words
 }
 
-function Game(props: props) {
+const Game = ({ wordsList }: props) => {
     const screen: { [key: string]: JSX.Element } = {
         IDLE: <Error message="Idle" />,
         OVER: <Error message="" />,

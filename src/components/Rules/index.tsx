@@ -1,7 +1,7 @@
 import React from 'react'
 
-function Rules() {
-    return (<>
+const Rules = () => {
+    return (
         <div className="container">
             <div className="header">
                 {/* Icon */}
@@ -14,12 +14,7 @@ function Rules() {
                 the bottom of the screen, you'll loose the game. Good luck!
             </p>
         </div>
-        <style jsx>{`
-            .container {
-                color: red;
-            }
-        `}</style>
-    </>)
+    )
 }
 
 export default Rules

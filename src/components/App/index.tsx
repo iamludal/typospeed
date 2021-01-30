@@ -5,7 +5,7 @@ import Error from '../Error'
 import './style.scss'
 import Game from '../Game'
 
-function App() {
+const App = () => {
 
     const [screen, setScreen] = useState<JSX.Element>(<Loader />)
 

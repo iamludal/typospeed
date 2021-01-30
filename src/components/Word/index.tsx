@@ -1,8 +1,15 @@
 import React, { CSSProperties } from 'react'
-import { WordProps } from '../../ts/types'
 import './style.scss'
 
-function Word(props: WordProps) {
+interface WordProps {
+    value: string,
+    x: number,
+    duration: number,
+    id: string,
+    [otherProp: string]: any
+}
+
+const Word = (props: WordProps) => {
     const { value, x, duration } = props
 
     const style: CSSProperties = {
