@@ -1,5 +1,6 @@
 node_modules/
 build/
+.vscode/
 package-lock.json
 .eslintcache
 react-app-env.d.ts
