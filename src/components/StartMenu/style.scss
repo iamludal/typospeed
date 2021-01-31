@@ -4,14 +4,6 @@
   transition: $transition;
 }
 
-#start-menu.hidden #play {
-  transform: translate(-50%, -50%) scale(10);
-}
-
-#start-menu.hidden #scores {
-  transform: translateY(-100%);
-}
-
 #scores {
   flex-direction: column;
   padding: 20px;
@@ -34,8 +26,8 @@
   transform: translate(-50%, -50%);
   transition: $transition;
   font-size: 2em;
-}
 
-#play:hover {
-  transform: translate(-50%, -50%) scale(1.1);
+  &:hover {
+    transform: translate(-50%, -50%) scale(1.1);
+  }
 }
