@@ -26,5 +26,3 @@ export const GameMachine = Machine({
 
 export type GameInterpreter = Interpreter<typeof GameMachine>
 export type stateChangeListener = StateListener<any, AnyEventObject>
-
-console.log(GameMachine.states)
