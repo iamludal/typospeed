@@ -1,4 +1,4 @@
-import type { GameInterpreter, stateChangeListener, WordProps, words } from "./types"
+import type { GameInterpreter, stateChangeListener, WordProps, words } from './types'
 import { interpret } from 'xstate'
 import { GameMachine } from './types'
 
