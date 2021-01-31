@@ -3,6 +3,8 @@ import { StateListener } from 'xstate/lib/interpreter'
 
 export type words = Array<string>
 
+export type callback = () => any
+
 export interface WordAttributes {
     value: string,
     x: number,
