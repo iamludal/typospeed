@@ -1,4 +1,4 @@
-import { Machine, Interpreter, AnyEventObject, State } from 'xstate'
+import { Machine, Interpreter, AnyEventObject } from 'xstate'
 import { StateListener } from 'xstate/lib/interpreter'
 
 export type words = Array<string>
