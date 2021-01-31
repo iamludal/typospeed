@@ -5,9 +5,9 @@ import Error from '../Error'
 import './style.scss'
 import Game from '../Game'
 
-const App = () => {
+const App: React.FC = () => {
 
-    const [screen, setScreen] = useState<JSX.Element>(<Loader />)
+    const [screen, setScreen] = useState(<Loader />)
 
     useEffect(() => {
         getWords()

@@ -5,12 +5,10 @@ interface WordProps {
     value: string,
     x: number,
     duration: number,
-    id: string,
     [otherProp: string]: any
 }
 
-const Word = (props: WordProps) => {
-    const { value, x, duration } = props
+const Word: React.FC<WordProps> = ({ value, x, duration }) => {
 
     const style: CSSProperties = {
         animationDuration: `${duration}s`,

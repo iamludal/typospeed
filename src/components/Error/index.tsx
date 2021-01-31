@@ -1,11 +1,13 @@
 import React from 'react'
 
-interface props {
+interface ErrorProps {
     message: string
 }
 
-const Error = ({ message }: props) => (
-    <p color="red">An error occurred: {message}</p>
-)
+const Error: React.FC<ErrorProps> = ({ message }) => {
+    return (
+        <p color="red">An error occurred: {message}</p>
+    )
+}
 
 export default Error

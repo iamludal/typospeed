@@ -2,11 +2,11 @@ import React, { useState } from 'react'
 import type { words, GameStates } from '../../ts/types'
 import Error from '../Error';
 
-interface props {
+interface GameProps {
     wordsList: words
 }
 
-const Game = ({ wordsList }: props) => {
+const Game: React.FC<GameProps> = ({ wordsList }) => {
     const screen: { [key: string]: JSX.Element } = {
         IDLE: <Error message="Idle" />,
         OVER: <Error message="" />,
