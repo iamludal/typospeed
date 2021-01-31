@@ -1,0 +1,26 @@
+.wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  position: absolute;
+  height: 100%;
+  width: 100%;
+}
+
+.btn {
+  background: $color-secondary;
+  border-radius: $radius-high;
+  padding: 0.6em 1em;
+  font-weight: bold;
+  font-size: 1.05em;
+  color: $color-primary;
+  margin: 0.5em;
+  transition: $transition;
+  border: 0.2em solid $color-secondary;
+
+  &:hover {
+    color: $color-secondary;
+    background: transparent;
+  }
+}
