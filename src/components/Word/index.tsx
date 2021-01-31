@@ -1,11 +1,8 @@
 import React, { CSSProperties } from 'react'
+import { WordAttributes } from '../../ts/types'
 import './style.scss'
 
-interface WordProps {
-    value: string,
-    x: number,
-    duration: number,
-    [otherProp: string]: any
+interface WordProps extends WordAttributes {
 }
 
 const Word: React.FC<WordProps> = ({ value, x, duration }) => {
