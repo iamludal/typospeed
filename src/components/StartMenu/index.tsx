@@ -9,7 +9,7 @@ interface StartMenuProps {
 
 const StartMenu: React.FC<StartMenuProps> = ({ onPlay }) => {
     const { best, last } = getScores()
-    const [showRules, setShowRules] = useState(userIsNew())
+    const [showRules, setShowRules] = useState<boolean>(userIsNew())
 
     useEffect(registerUser, [])
 

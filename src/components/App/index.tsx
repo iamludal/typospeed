@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, ReactNode } from 'react'
 import { getWords } from '../../ts/utils'
 import Loader from '../Loader'
 import Error from '../Error'
@@ -7,7 +7,7 @@ import Game from '../Game'
 
 const App: React.FC = () => {
 
-    const [screen, setScreen] = useState(<Loader />)
+    const [screen, setScreen] = useState<ReactNode>(<Loader />)
 
     useEffect(() => {
         getWords()

@@ -60,7 +60,7 @@ export function saveScore(score: number): void {
 /**
  * Return true if the user is new (opening the game for the first time)
  */
-export function userIsNew(): Boolean {
+export function userIsNew(): boolean {
     const uuid = localStorage.getItem('uuid') || ''
     return !validate(uuid)
 }
