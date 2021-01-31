@@ -7,7 +7,7 @@ export interface WordAttributes {
     value: string,
     x: number,
     duration: number,
-    [otherProp: string]: any
+    [other: string]: any
 }
 
 export interface Scores {
