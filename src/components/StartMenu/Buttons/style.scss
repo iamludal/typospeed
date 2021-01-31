@@ -1,0 +1,23 @@
+@import '../../globals';
+
+.buttons {
+  top: 1rem;
+  right: 1rem;
+  position: absolute;
+  display: flex;
+  align-items: center;
+}
+
+.buttons .btn {
+  opacity: 0.6;
+  font-size: 2em;
+  color: $color-secondary;
+  transition: $transition;
+  background: none;
+  margin: 0 0.2em;
+}
+
+.buttons .btn:hover {
+  opacity: 0.8;
+  transform: scale(1.05);
+}

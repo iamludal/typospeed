@@ -1,0 +1,41 @@
+@import '../globals.scss';
+
+#start-menu {
+  transition: $transition;
+}
+
+#start-menu.hidden #play {
+  transform: translate(-50%, -50%) scale(10);
+}
+
+#start-menu.hidden #scores {
+  transform: translateY(-100%);
+}
+
+#scores {
+  flex-direction: column;
+  padding: 20px;
+  position: absolute;
+  top: 0;
+  left: 0;
+  columns: 2;
+  column-rule: 1px solid $color-secondary;
+  transition: $transition;
+}
+
+#play {
+  display: flex;
+  position: absolute;
+  background: $color-secondary-transparent;
+  padding: 20px;
+  border-radius: $radius-high;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  transition: $transition;
+  font-size: 2em;
+}
+
+#play:hover {
+  transform: translate(-50%, -50%) scale(1.1);
+}

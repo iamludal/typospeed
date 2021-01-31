@@ -1,12 +1,16 @@
 import React from 'react'
 
-const Rules = () => {
+interface RulesProps {
+    onClose: () => any
+}
+
+const Rules: React.FC<RulesProps> = ({ onClose }) => {
     return (
         <div className="container">
             <div className="header">
                 {/* Icon */}
                 <h1>How to play?</h1>
-                <div className="close"></div>
+                <div className="close" onClick={onClose}></div>
             </div>
             <p>
                 As soon as you'll start the game, words are going to fall out.
