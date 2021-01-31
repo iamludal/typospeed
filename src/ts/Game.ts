@@ -1,17 +1,22 @@
-import type { GameInterpreter, stateChangeListener, WordProps, words } from './types'
 import { interpret } from 'xstate'
 import { GameMachine } from './types'
+import type {
+    GameInterpreter,
+    stateChangeListener,
+    WordAttributes,
+    words
+} from './types'
 
 class Game {
 
-    private _fallTime = 2 * 1000 // drop a word every 2 seconds
+    private _fallTime = 2 * 1000 // drop a word every 2s (2000ms)
     private _duration = 10 // word time (in sec) to reach bottom of screen
     private _score = 0
     private _wordsList: words
-    private _fallingWords: Array<WordProps> = []
+    private _fallingWords: Array<WordAttributes> = []
     private _wordsListener?: Function
     private _scoreListener?: Function
-    private _intervals: { [key: string]: number } = {}
+    private _intervals: Record<string, number> = {}
     private state: GameInterpreter
 
     constructor(wordsList: words, stateListener: stateChangeListener) {
@@ -43,11 +48,11 @@ class Game {
         }, this._fallTime)
     }
 
-    public get fallingWords(): Array<WordProps> {
+    public get fallingWords(): Array<WordAttributes> {
         return this._fallingWords
     }
 
-    public set fallingWords(fallingWords: Array<WordProps>) {
+    public set fallingWords(fallingWords: Array<WordAttributes>) {
         this._fallingWords = fallingWords
 
         if (this._wordsListener)
@@ -70,7 +75,7 @@ class Game {
         const valid = this.isValid(word)
 
         if (valid) {
-            const removed: WordProps = this.removeWord(word)
+            const removed: WordAttributes = this.removeWord(word)
             this.applyScore(removed)
             clearInterval(removed.timeout)
         }
@@ -82,7 +87,7 @@ class Game {
         return this.fallingWords.some(w => w.value == word)
     }
 
-    private removeWord(word: string): WordProps {
+    private removeWord(word: string): WordAttributes {
         const index = this.fallingWords.findIndex(w => w.value == word)
         const toRemove = this.fallingWords[index]
         this.fallingWords = this.fallingWords.filter((_, i) => i != index)
@@ -90,7 +95,7 @@ class Game {
         return toRemove
     }
 
-    private applyScore(word: WordProps): void {
+    private applyScore(word: WordAttributes): void {
         this.score += Math.round(word.value.length * (100 / word.duration))
     }
 
@@ -99,7 +104,7 @@ class Game {
         this.fallingWords = [...this.fallingWords, newWord]
     }
 
-    private generateWord(): WordProps {
+    private generateWord(): WordAttributes {
         const i = Math.floor(Math.random() * this._wordsList.length)
         const value = this._wordsList[i]
         const x = this.randomPos()
@@ -133,7 +138,7 @@ class Game {
         return Math.round(Math.random() * delta) + lowerBound
     }
 
-    public registerWordsListener(listener: (word: Array<WordProps>) => any): void {
+    public registerWordsListener(listener: (word: Array<WordAttributes>) => any): void {
         this._wordsListener = listener
     }
 

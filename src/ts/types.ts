@@ -3,6 +3,13 @@ import { StateListener } from 'xstate/lib/interpreter'
 
 export type words = Array<string>
 
+export interface WordAttributes {
+    value: string,
+    x: number,
+    duration: number,
+    [otherProp: string]: any
+}
+
 export interface Scores {
     best: number,
     last: number
