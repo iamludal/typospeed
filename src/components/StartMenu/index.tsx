@@ -11,7 +11,10 @@ const StartMenu: React.FC<StartMenuProps> = ({ onPlay }) => {
     const { best, last } = getScores()
     const [showRules, setShowRules] = useState<boolean>(userIsNew())
 
-    useEffect(registerUser, [])
+    useEffect(() => {
+        if (userIsNew())
+            registerUser()
+    }, [])
 
     return (
         <div id="start-menu">
