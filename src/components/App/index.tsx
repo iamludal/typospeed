@@ -2,8 +2,8 @@ import React, { useState, useEffect, ReactNode } from 'react'
 import { getWords } from '../../ts/utils'
 import Loader from '../Loader'
 import Error from '../Error'
-import './style.scss'
 import Game from '../Game'
+import './style.scss'
 
 const App: React.FC = () => {
 

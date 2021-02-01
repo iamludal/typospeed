@@ -1,4 +1,5 @@
 import React from 'react'
+import './style.scss'
 
 interface RulesProps {
     onClose: () => any

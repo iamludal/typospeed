@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { getScores, registerUser, userIsNew } from '../../ts/utils'
 import Rules from './Rules'
 import Buttons from './Buttons'
+import './style.scss'
 
 interface StartMenuProps {
     onPlay: () => any
