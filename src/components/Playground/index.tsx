@@ -1,9 +1,9 @@
 import React, { useEffect, useRef, useState } from 'react'
-import 'style.scss'
 import type { WordAttributes } from '../../ts/types'
 import type Game from '../../ts/Game'
 import Word from './Word'
 import classNames from 'classnames'
+import './style.scss'
 
 interface PlaygroundProps {
     game: Game
