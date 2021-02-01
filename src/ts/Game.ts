@@ -13,7 +13,7 @@ class Game {
     private _duration = 10 // word time (in sec) to reach bottom of screen
     private _score = 0
     private _wordsList: words
-    private _fallingWords: Array<WordAttributes> = []
+    private _fallingWords: WordAttributes[] = []
     private _wordsListener?: Function
     private _scoreListener?: Function
     private _intervals: Record<string, number> = {}
@@ -48,11 +48,11 @@ class Game {
         }, this._fallTime)
     }
 
-    public get fallingWords(): Array<WordAttributes> {
+    public get fallingWords(): WordAttributes[] {
         return this._fallingWords
     }
 
-    public set fallingWords(fallingWords: Array<WordAttributes>) {
+    public set fallingWords(fallingWords: WordAttributes[]) {
         this._fallingWords = fallingWords
 
         if (this._wordsListener)
@@ -138,7 +138,7 @@ class Game {
         return Math.round(Math.random() * delta) + lowerBound
     }
 
-    public registerWordsListener(listener: (word: Array<WordAttributes>) => any): void {
+    public registerWordsListener(listener: (word: WordAttributes[]) => any): void {
         this._wordsListener = listener
     }
 

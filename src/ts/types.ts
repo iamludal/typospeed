@@ -1,7 +1,7 @@
 import { Machine, Interpreter, AnyEventObject } from 'xstate'
 import { StateListener } from 'xstate/lib/interpreter'
 
-export type words = Array<string>
+export type words = string[]
 
 export type callback = () => any
 
