@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { getScores, registerUser, userIsNew } from '../../ts/utils'
+import { FaMedal } from 'react-icons/fa'
+import { MdPlayArrow } from 'react-icons/md'
 import Rules from './Rules'
 import Buttons from './Buttons'
 import './style.scss'
@@ -20,12 +22,12 @@ const StartMenu: React.FC<StartMenuProps> = ({ onPlay }) => {
     return (
         <div id="start-menu">
             <div className="scores">
-                {/* Icon: FaMedal */}
+                <FaMedal />
                 <span>Best score: <strong>{best}</strong></span>
                 <span>Last score: <strong>{last}</strong></span>
             </div>
             <button id="play" onClick={onPlay}>
-                {/* Icon: PlayCircle */}
+                <MdPlayArrow />
             </button>
             {showRules
                 ? <Rules onClose={() => setShowRules(false)} />
