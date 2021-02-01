@@ -2,7 +2,7 @@ import React, { useState, useEffect, ReactNode } from 'react'
 import { getWords } from '../../ts/utils'
 import Loader from '../Loader'
 import Error from '../Error'
-import Game from '../Game'
+import GameUI from '../GameUI'
 import './style.scss'
 
 const App: React.FC = () => {
@@ -11,7 +11,7 @@ const App: React.FC = () => {
 
     useEffect(() => {
         getWords()
-            .then(wordsList => { setScreen(<Game wordsList={wordsList} />) })
+            .then(wordsList => { setScreen(<GameUI wordsList={wordsList} />) })
             .catch(err => setScreen(<Error message={err} />))
     }, [])
 
