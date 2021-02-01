@@ -6,14 +6,14 @@ export type words = string[]
 export type callback = () => any
 
 export interface WordAttributes {
-    readonly value: string,
-    readonly x: number,
-    readonly duration: number,
+    readonly value: string
+    readonly x: number
+    readonly duration: number
     [other: string]: any
 }
 
 export interface Scores {
-    best: number,
+    best: number
     last: number
 }
 

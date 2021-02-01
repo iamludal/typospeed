@@ -5,9 +5,10 @@ import { MdPlayArrow } from 'react-icons/md'
 import Rules from './Rules'
 import Buttons from './Buttons'
 import './style.scss'
+import { callback } from '../../ts/types'
 
 interface StartMenuProps {
-    onPlay: () => any
+    onPlay: callback
 }
 
 const StartMenu: React.FC<StartMenuProps> = ({ onPlay }) => {

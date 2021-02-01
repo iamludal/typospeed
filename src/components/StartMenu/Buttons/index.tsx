@@ -1,10 +1,11 @@
 import React from 'react'
+import { callback } from '../../../ts/types'
 import './style.scss'
 
 const REPO_URL = 'https://github.com/iamludal/typospeed'
 
 interface ButtonsProps {
-    onHelp: () => any
+    onHelp: callback
 }
 
 const Buttons: React.FC<ButtonsProps> = ({ onHelp }) => {
