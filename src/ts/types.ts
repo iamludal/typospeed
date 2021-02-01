@@ -6,9 +6,9 @@ export type words = Array<string>
 export type callback = () => any
 
 export interface WordAttributes {
-    value: string,
-    x: number,
-    duration: number,
+    readonly value: string,
+    readonly x: number,
+    readonly duration: number,
     [other: string]: any
 }
 
