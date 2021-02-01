@@ -1,4 +1,6 @@
 import React from 'react'
+import { IoMdHelpCircle } from 'react-icons/io'
+import { MdClose } from 'react-icons/md'
 import './style.scss'
 
 interface RulesProps {
@@ -9,9 +11,12 @@ const Rules: React.FC<RulesProps> = ({ onClose }) => {
     return (
         <div className="container">
             <div className="header">
-                {/* Icon */}
-                <h1>How to play?</h1>
-                <div className="close" onClick={onClose}></div>
+                <h1>
+                    <IoMdHelpCircle /> How to play?
+                </h1>
+                <div className="close" onClick={onClose}>
+                    <MdClose />
+                </div>
             </div>
             <p>
                 As soon as you'll start the game, words are going to fall out.

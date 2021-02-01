@@ -1,4 +1,5 @@
 import React from 'react'
+import { FaSadTear } from 'react-icons/fa'
 import { callback, Scores } from '../../ts/types'
 import './style.scss'
 
@@ -12,7 +13,9 @@ const EndScreen: React.FC<EndScreenProps> = (
 ) => {
     return (
         <div className="wrapper">
-            <h1>{/* Icon: cry */} Game over</h1>
+            <h1>
+                <FaSadTear /> Game over
+            </h1>
             <h2>You score: {last}</h2>
             <p>Best score: {best}</p>
             <div>

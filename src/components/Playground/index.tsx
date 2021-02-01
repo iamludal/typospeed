@@ -1,5 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react'
 import type { WordAttributes } from '../../ts/types'
+import { MdStars } from 'react-icons/md'
 import type Game from '../../ts/Game'
 import Word from './Word'
 import classNames from 'classnames'
@@ -40,9 +41,7 @@ const Playground: React.FC<PlaygroundProps> = ({ game }) => {
                 {fallingWords.map(w => <Word key={w.value + w.x} {...w} />)}
             </div>
             <div className="bottom-bar">
-                <div className="score">
-                    {/* Icon: Star */} Score: {score}
-                </div>
+                <div className="score"><MdStars />Score: {score}</div>
                 <input type="text" className="input" spellCheck={false}
                     ref={input} onKeyUp={handeKeyUp} value={typedWord} />
             </div>
