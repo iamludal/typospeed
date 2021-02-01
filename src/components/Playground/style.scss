@@ -1,0 +1,45 @@
+.playground {
+  height: 100vh;
+
+  &.invalid {
+    animation: invalid 0.2s 2 alternate backwards linear;
+  }
+}
+
+@keyframes invalid {
+  75%,
+  100% {
+      background-color: #db3434;
+  }
+}
+
+.words-container {
+  height: 100vh;
+  width: 100vw;
+}
+
+.bottom-bar {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 1em;
+}
+
+.input {
+  padding: 0.6em 0;
+  background: $color-primary;
+  text-transform: uppercase;
+  text-align: center;
+  font-size: 1.1em;
+  border-radius: $radius-high;
+  background: $color-secondary-transparent;
+  transition: transform $transition;
+}
+
+.score {
+  opacity: 0.9;
+  padding: 0.5em;
+}

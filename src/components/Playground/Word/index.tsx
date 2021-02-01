@@ -1,5 +1,5 @@
 import React, { CSSProperties } from 'react'
-import { WordAttributes } from '../../ts/types'
+import { WordAttributes } from '../../../ts/types'
 import './style.scss'
 
 interface WordProps extends WordAttributes {
