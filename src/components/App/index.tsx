@@ -3,6 +3,7 @@ import { getWords } from '../../ts/utils'
 import Loader from '../Loader'
 import Error from '../Error'
 import GameUI from '../GameUI'
+import Context from './Context'
 import './style.scss'
 
 const App: React.FC = () => {
@@ -16,9 +17,11 @@ const App: React.FC = () => {
     }, [])
 
     return (
-        <main>
-            {screen}
-        </main>
+        <Context>
+            <main>
+                {screen}
+            </main>
+        </Context>
     )
 }
 
