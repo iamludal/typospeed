@@ -1,5 +1,5 @@
 import React from 'react'
-import { callback, Scores } from '../../ts/types';
+import { callback, Scores } from '../../ts/types'
 import './style.scss'
 
 interface EndScreenProps extends Scores {

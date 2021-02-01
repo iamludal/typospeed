@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import type { words, GameStates } from '../../ts/types'
-import Error from '../Error';
+import Error from '../Error'
 
 interface GameUIProps {
     wordsList: words
@@ -13,7 +13,7 @@ const GameUI: React.FC<GameUIProps> = ({ wordsList }) => {
         PLAYING: <div>PLAYING</div>
     }
 
-    const [state, setState] = useState<GameStates>('IDLE');
+    const [state, setState] = useState<GameStates>('IDLE')
 
     setTimeout(() => setState('PLAYING'), 1000)
 
