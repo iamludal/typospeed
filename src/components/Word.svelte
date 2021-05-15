@@ -47,6 +47,6 @@
     }
 </style>
 
-<div out:fade>
+<div out:fade={{ duration: 100 }}>
     <div class="word" {style}>{value}</div>
 </div>
