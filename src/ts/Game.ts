@@ -9,6 +9,7 @@ class Game {
     private _score = 0
     private _wordsList: words
     private _fallingWords: Array<WordProps> = []
+    private _pointSound: HTMLAudioElement
     private _wordsListener: Function
     private _scoreListener: Function
     private _intervals: { [key: string]: number } = {}
@@ -16,6 +17,7 @@ class Game {
 
     constructor(wordsList: words, stateListener: OnChangeListener) {
         this._wordsList = wordsList
+        this._pointSound = new Audio('assets/point.mp3');
         this.state = interpret(GameMachine, stateListener)
     }
 
@@ -66,6 +68,7 @@ class Game {
         if (valid) {
             const removed: WordProps = this.removeWord(word)
             this.applyScore(removed)
+            this._pointSound.play();
             clearInterval(removed.timeout)
         }
 
