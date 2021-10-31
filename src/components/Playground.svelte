@@ -32,7 +32,7 @@
     const handleKeyUp = (e: KeyboardEvent) => {
         setValidInput();
 
-        if (e.key == "Enter") {
+        if (e.key == "Enter" && typedWord !== "") {
             invalidInput = !game.handle(typedWord);
             resetInput();
             return;
