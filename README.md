@@ -11,9 +11,9 @@ words that are falling on your screen, as soon as possible!
 # ▶ Run the project
 
 Install dependencies.
-> ```
-> yarn
-> ```
+```
+yarn
+```
 
 Run the development server.
 ```
