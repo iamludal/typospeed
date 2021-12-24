@@ -1,4 +1,6 @@
-<img align="center" src="assets/banner.png" />
+<p align="center"> 
+  <a href="https://typospeed.iamludal.fr"><img src="assets/banner.png" /></a>
+</p>
 
 # ❓ Presentation
 
