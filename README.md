@@ -6,12 +6,19 @@
 words that are falling on your screen, as soon as possible!
 
 
-# ✅ To do
+# ▶ Run the project
 
-- [ ] Multilang support
-- [ ] Leaderboard
-- [ ] Add sounds
-- [ ] Support keyboard navigation
+Install dependencies.
+> ```
+> yarn
+> ```
+
+Run the development server.
+```
+yarn dev
+```
+
+The game will be available on `localhost:5000`.
 
 
 # 📸 Screenshots
