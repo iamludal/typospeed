@@ -8,7 +8,7 @@
 words that are falling on your screen, as soon as possible!
 
 
-# ▶ Run the project
+# ▶️ Run the project
 
 Install dependencies.
 ```
