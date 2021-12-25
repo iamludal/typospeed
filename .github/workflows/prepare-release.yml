@@ -8,10 +8,11 @@ jobs:
     steps:
       - name: Checkout repo 📥
         uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
 
       - name: Rebase main from develop 🔀
         run: |
-          git fetch origin
           git checkout main
           git rebase develop
           git push origin main
