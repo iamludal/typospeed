@@ -1,0 +1,17 @@
+name: Prepare Release 🔧
+
+on: workflow_dispatch
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repo 📥
+        uses: actions/checkout@v2
+
+      - name: Rebase main from develop 🔀
+        run: |
+          git fetch origin
+          git checkout main
+          git rebase develop
+          git push origin main
