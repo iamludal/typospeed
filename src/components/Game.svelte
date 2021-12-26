@@ -2,7 +2,7 @@
   import Playground from './Playground.svelte';
   import StartMenu from './StartMenu.svelte';
   import EndScreen from './EndScreen.svelte';
-  import Game from '../ts/Game';
+  import Game from '../ts/game';
   import type { GameService, States, words } from '../ts/types';
   import { getScores, saveScore } from '../ts/utils';
 

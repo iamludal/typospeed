@@ -1,6 +1,6 @@
 <script lang="ts">
   import { onMount } from 'svelte/internal';
-  import type Game from '../ts/Game';
+  import type Game from '../ts/game';
   import type { WordProps } from '../ts/types';
   import Word from './Word.svelte';
   import { fade } from 'svelte/transition';
