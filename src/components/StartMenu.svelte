@@ -8,7 +8,9 @@
   import Icon from './Icon.svelte';
   import type { Scores } from '../ts/types';
   import IoMdHelpCircle from 'svelte-icons/io/IoMdHelpCircle.svelte';
+  import IoMdSettings from 'svelte-icons/io/IoMdSettings.svelte';
   import FaGithubAlt from 'svelte-icons/fa/FaGithubAlt.svelte';
+  import Settings from './Settings.svelte';
 
   const GITHUB_LINK = 'https://github.com/iamludal/typospeed';
 
@@ -18,6 +20,7 @@
   const { best, last } = scores;
   const dispatch = createEventDispatcher();
 
+  let settingsOpen = false;
   let hidden = false;
 </script>
 
@@ -54,9 +57,16 @@
       <button class="help btn" title="Click me for help" on:click={() => (isNew = true)}>
         <Icon icon={IoMdHelpCircle} />
       </button>
+      <button class="btn" title="Settings" on:click={() => (settingsOpen = true)}>
+        <Icon icon={IoMdSettings} />
+      </button>
     </div>
   {/if}
 </div>
+
+{#if settingsOpen}
+  <Settings on:close={() => (settingsOpen = false)} />
+{/if}
 
 <style>
   #start-menu {
@@ -108,16 +118,17 @@
   }
 
   .buttons .btn {
-    opacity: 0.6;
+    opacity: 0.7;
     font-size: 2em;
     color: var(--color-secondary);
     transition: var(--transition);
     background: none;
-    margin: 0 0.2em;
+    margin: 0 0.4em;
+    padding: 0;
   }
 
   .buttons .btn:hover {
-    opacity: 0.8;
+    opacity: 1;
     transform: scale(1.05);
   }
 </style>

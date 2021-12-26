@@ -1,9 +1,22 @@
 <script lang="ts">
   import Loader from './Loader.svelte';
-  import { getWords } from '../ts/utils';
+  import { getColorTheme, getWords } from '../ts/utils';
   import Game from './Game.svelte';
+  import { settings } from '../ts/store';
+  import { onMount } from 'svelte';
 
   const wordsPromise = getWords();
+
+  onMount(() => {
+    settings.update(oldSettings => ({
+      ...oldSettings,
+      colorTheme: getColorTheme(),
+    }));
+
+    settings.subscribe(newSettings => {
+      document.documentElement.style.setProperty('--color-primary', newSettings.colorTheme);
+    });
+  });
 </script>
 
 {#await wordsPromise}
@@ -16,9 +29,8 @@
 
 <style>
   :global(:root) {
-    --color-primary: #3498db;
     --color-secondary: #fff;
-    --color-secondary-transparent: rgba(255, 255, 255, 0.1);
+    --color-secondary-transparent: rgba(255, 255, 255, 0.15);
     --font-family: 'Montserrat';
     --transition: 0.3s;
     --radius-high: 500em;
