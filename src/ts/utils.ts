@@ -1,5 +1,6 @@
 import type { Scores, words } from './types';
 import { v4 as uuidv4, validate } from 'uuid';
+import { colors } from './constants';
 
 const WORDS_URL = '/assets/data/words.json';
 
@@ -64,4 +65,13 @@ export function userIsNew(): Boolean {
 
 export function registerUser(): void {
   localStorage.setItem('uuid', uuidv4());
+}
+
+export function getColorTheme(): string {
+  const colorTheme = localStorage.getItem('colorTheme') || colors[0];
+  return colorTheme;
+}
+
+export function setColorTheme(colorTheme: string): void {
+  localStorage.setItem('colorTheme', colorTheme);
 }
