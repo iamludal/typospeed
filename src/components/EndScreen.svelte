@@ -16,10 +16,7 @@
 
 <div class="wrapper" out:fade={{ duration: 200 }} in:fade={{ duration: 800 }}>
   <h1>
-    <Icon>
-      <FaRegSadCry />
-    </Icon>
-    Game Over!
+    <Icon icon={FaRegSadCry} /> Game Over!
   </h1>
 
   <h2>Your score: {last}</h2>
@@ -27,16 +24,10 @@
 
   <div>
     <button class="btn" on:click={() => dispatch('menu')}>
-      <Icon>
-        <MdMenu />
-      </Icon>
-      Menu
+      <Icon icon={MdMenu} /> Menu
     </button>
     <button class="btn" on:click={() => dispatch('playagain')}>
-      <Icon>
-        <PlayCircle />
-      </Icon>
-      Play again
+      <Icon icon={PlayCircle} /> Play again
     </button>
   </div>
 </div>

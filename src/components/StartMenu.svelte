@@ -24,18 +24,14 @@
 <div id="start-menu" class:hidden transition:fade={{ duration: 400 }}>
   <div id="scores">
     <div>
-      <Icon>
-        <FaMedal />
-      </Icon>
+      <Icon icon={FaMedal} />
       Best score:
       <strong>{best}</strong>
     </div>
     <div>Last score: <strong>{last}</strong></div>
   </div>
   <button id="play" on:click={() => dispatch('start')}>
-    <Icon>
-      <PlayCircle />
-    </Icon>
+    <Icon icon={PlayCircle} />
   </button>
   {#if isNew}
     <Rules
@@ -53,14 +49,10 @@
         title="Star me on GitHub"
         class="btn"
       >
-        <Icon>
-          <FaGithubAlt />
-        </Icon>
+        <Icon icon={FaGithubAlt} />
       </a>
       <button class="help btn" title="Click me for help" on:click={() => (isNew = true)}>
-        <Icon>
-          <IoMdHelpCircle />
-        </Icon>
+        <Icon icon={IoMdHelpCircle} />
       </button>
     </div>
   {/if}

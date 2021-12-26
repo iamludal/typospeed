@@ -8,10 +8,7 @@
 <div class="container" transition:fly={{ x: 40, duration: 400 }}>
   <div class="header">
     <h1>
-      <Icon>
-        <IoMdHelpCircle />
-      </Icon>
-      How to play?
+      <Icon icon={IoMdHelpCircle} /> How to play?
     </h1>
     <button class="close" on:click>
       <MdClose />

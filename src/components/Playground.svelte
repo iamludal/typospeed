@@ -52,11 +52,7 @@
   </div>
   <div class="bottom-bar">
     <div class="score">
-      <Icon>
-        <MdStars />
-      </Icon>
-      Score:
-      {score}
+      <Icon icon={MdStars} /> Score: {score}
     </div>
     <input
       class="input"

@@ -1,5 +1,9 @@
-<div class="icon">
-  <slot />
+<script lang="ts">
+  export let icon: any;
+</script>
+
+<div class="icon" {...$$props}>
+  <svelte:component this={icon} class="" />
 </div>
 
 <style>
