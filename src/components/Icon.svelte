@@ -3,7 +3,7 @@
 </script>
 
 <div class="icon" {...$$props}>
-  <svelte:component this={icon} class="" />
+  <svelte:component this={icon} />
 </div>
 
 <style>
