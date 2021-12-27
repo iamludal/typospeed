@@ -28,14 +28,11 @@
   };
 
   onMount(() => {
-    window.addEventListener('keyup', handleKeyUp);
     currenctColor = getColorTheme();
   });
-
-  onDestroy(() => {
-    window.removeEventListener('keyup', handleKeyUp);
-  });
 </script>
+
+<svelte:window on:keyup={handleKeyUp} />
 
 <div class="modal" transition:fade={{ duration: 200 }} on:click|self={close}>
   <div class="modal__content">
