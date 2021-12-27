@@ -1,11 +1,11 @@
 <script lang="ts">
-  import { createEventDispatcher } from 'svelte';
+  import { createEventDispatcher, onDestroy, onMount } from 'svelte';
   import { fade } from 'svelte/transition';
   import IoMdClose from 'svelte-icons/io/IoMdClose.svelte';
   import IconButton from './shared/IconButton.svelte';
   import { colors } from '../ts/constants';
   import { settings } from '../ts/store';
-  import { setColorTheme } from '../ts/utils';
+  import { getColorTheme, setColorTheme } from '../ts/utils';
   import Icon from './shared/Icon.svelte';
   import IoMdCheckmark from 'svelte-icons/io/IoMdCheckmark.svelte';
 
@@ -18,10 +18,22 @@
   const setColor = (selectedColor: string) => {
     settings.update(oldSettings => ({ ...oldSettings, colorTheme: selectedColor }));
     setColorTheme(selectedColor);
+    currenctColor = selectedColor;
   };
 
-  settings.subscribe(({ colorTheme }) => {
-    currenctColor = colorTheme;
+  const handleKeyUp = (e: KeyboardEvent) => {
+    if (e.key === 'Escape') {
+      close();
+    }
+  };
+
+  onMount(() => {
+    window.addEventListener('keyup', handleKeyUp);
+    currenctColor = getColorTheme();
+  });
+
+  onDestroy(() => {
+    window.removeEventListener('keyup', handleKeyUp);
   });
 </script>
 
