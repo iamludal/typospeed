@@ -5,7 +5,7 @@
   import PlayCircle from 'svelte-icons/md/MdPlayArrow.svelte';
   import MdMenu from 'svelte-icons/md/MdMenu.svelte';
   import FaRegSadCry from 'svelte-icons/fa/FaRegSadCry.svelte';
-  import Icon from './Icon.svelte';
+  import Icon from './shared/Icon.svelte';
 
   export let scores: Scores;
 

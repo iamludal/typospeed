@@ -2,7 +2,7 @@
   import { fly } from 'svelte/transition';
   import IoMdHelpCircle from 'svelte-icons/io/IoMdHelpCircle.svelte';
   import MdClose from 'svelte-icons/md/MdClose.svelte';
-  import Icon from './Icon.svelte';
+  import Icon from './shared/Icon.svelte';
 </script>
 
 <div class="container" transition:fly={{ x: 40, duration: 400 }}>

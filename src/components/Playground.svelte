@@ -5,7 +5,7 @@
   import Word from './Word.svelte';
   import { fade } from 'svelte/transition';
   import MdStars from 'svelte-icons/md/MdStars.svelte';
-  import Icon from './Icon.svelte';
+  import Icon from './shared/Icon.svelte';
 
   export let game: Game;
 

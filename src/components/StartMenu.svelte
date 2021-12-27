@@ -5,7 +5,7 @@
   import PlayCircle from 'svelte-icons/md/MdPlayArrow.svelte';
   import FaMedal from 'svelte-icons/fa/FaMedal.svelte';
   import Rules from './Rules.svelte';
-  import Icon from './Icon.svelte';
+  import Icon from './shared/Icon.svelte';
   import type { Scores } from '../ts/types';
   import IoMdHelpCircle from 'svelte-icons/io/IoMdHelpCircle.svelte';
   import IoMdSettings from 'svelte-icons/io/IoMdSettings.svelte';

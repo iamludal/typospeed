@@ -6,7 +6,7 @@
   import { colors } from '../ts/constants';
   import { settings } from '../ts/store';
   import { setColorTheme } from '../ts/utils';
-  import Icon from './Icon.svelte';
+  import Icon from './shared/Icon.svelte';
   import IoMdCheckmark from 'svelte-icons/io/IoMdCheckmark.svelte';
 
   let currenctColor: string;
