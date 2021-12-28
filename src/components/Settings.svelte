@@ -1,15 +1,18 @@
 <script lang="ts">
-  import { createEventDispatcher, onDestroy, onMount } from 'svelte';
+  import { createEventDispatcher } from 'svelte';
   import { fade } from 'svelte/transition';
   import IoMdClose from 'svelte-icons/io/IoMdClose.svelte';
   import IconButton from './shared/IconButton.svelte';
-  import { colors } from '../ts/constants';
+  import { colors, COLOR_REGEX } from '../ts/constants';
   import { settings } from '../ts/store';
-  import { getColorTheme, setColorTheme } from '../ts/utils';
+  import { getColorTheme, isTooBright, setColorTheme } from '../ts/utils';
   import Icon from './shared/Icon.svelte';
   import IoMdCheckmark from 'svelte-icons/io/IoMdCheckmark.svelte';
+  import MdDoNotDisturb from 'svelte-icons/md/MdDoNotDisturb.svelte';
 
-  let currenctColor: string;
+  let currenctColor: string = getColorTheme();
+
+  $: errorMessage = getErrorMessage(currenctColor);
 
   const dispatch = createEventDispatcher();
 
@@ -27,9 +30,20 @@
     }
   };
 
-  onMount(() => {
-    currenctColor = getColorTheme();
-  });
+  const getErrorMessage = (color: string) => {
+    if (!COLOR_REGEX.test(color)) {
+      return 'Invalid color';
+    } else if (isTooBright(color)) {
+      return 'Color is too bright';
+    }
+    return null;
+  };
+
+  const handleInputChange = () => {
+    if (errorMessage === null) {
+      setColor(currenctColor);
+    }
+  };
 </script>
 
 <svelte:window on:keyup={handleKeyUp} />
@@ -41,6 +55,22 @@
     <div class="section">
       <span class="section__title">Theme</span>
       <div class="colors">
+        <div class="input-container">
+          <input
+            type="text"
+            class="color-input"
+            placeholder="#353535"
+            class:color-input--invalid={errorMessage !== null}
+            bind:value={currenctColor}
+            on:input={handleInputChange}
+          />
+          {#if errorMessage !== null}
+            <div class="input-error">
+              <Icon icon={MdDoNotDisturb} />
+              {errorMessage}
+            </div>
+          {/if}
+        </div>
         {#each colors as color}
           <div
             class={`color ${currenctColor === color ? 'color-active' : ''}`}
@@ -68,7 +98,8 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    background-color: rgba(0, 0, 0, 0.4);
+    background-color: rgba(0, 0, 0, 0.5);
+    backdrop-filter: blur(2px);
   }
 
   .modal__content {
@@ -86,7 +117,7 @@
   .section {
     display: flex;
     align-items: center;
-    gap: 2rem;
+    gap: 5rem;
   }
 
   .section__title {
@@ -95,7 +126,7 @@
 
   .colors {
     display: flex;
-    gap: 0.2em;
+    gap: 0.3em;
   }
 
   .color {
@@ -117,6 +148,32 @@
 
   .color-active {
     border: 0.2em solid var(--color-secondary-transparent);
+  }
+
+  .input-container {
+    position: relative;
+    margin-inline-end: 0.2em;
+  }
+  .color-input {
+    width: 9ch;
+    background-color: transparent;
+    border-radius: 0.4em;
+    border: 0.2em solid var(--color-secondary-transparent);
+    text-align: center;
+    font-size: large;
+  }
+
+  .color-input--invalid {
+    border: 0.2em solid var(--color-secondary-transparent);
+  }
+  .input-error {
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    width: max-content;
+    font-size: small;
+    margin-top: 0.25em;
   }
 
   .close {

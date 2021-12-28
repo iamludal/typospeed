@@ -1,1 +1,3 @@
-export const colors = ['#3498db', '#41cece', '#e9a250', '#68cc89', '#dd88aa'];
+export const colors = ['#3498db', '#313131', '#c77a99'];
+
+export const COLOR_REGEX = new RegExp(/^#([0-9a-f]{3}|[0-9a-f]{6})$/i);

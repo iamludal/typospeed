@@ -1,6 +1,6 @@
 import type { Scores, words } from './types';
 import { v4 as uuidv4, validate } from 'uuid';
-import { colors } from './constants';
+import { colors, COLOR_REGEX } from './constants';
 
 const WORDS_URL = '/assets/data/words.json';
 
@@ -69,9 +69,34 @@ export function registerUser(): void {
 
 export function getColorTheme(): string {
   const colorTheme = localStorage.getItem('colorTheme') || colors[0];
+  if (!COLOR_REGEX.test(colorTheme) || isTooBright(colorTheme)) {
+    localStorage.setItem('colorTheme', colors[0]);
+    return colors[0];
+  }
   return colorTheme;
 }
 
 export function setColorTheme(colorTheme: string): void {
   localStorage.setItem('colorTheme', colorTheme);
+}
+
+/**
+ * Determine whether or not a color is too bright to prevent the user
+ * from not being able to read the text
+ * @param color the color to check
+ * @returns true if the color is too bright, false otherwise
+ */
+export function isTooBright(color: string): boolean {
+  let hexa = color.substring(1);
+
+  if (hexa.length === 3) {
+    hexa = hexa.replace(/(.)/g, '$1$1');
+  }
+
+  const rgb = parseInt(hexa, 16); // convert rrggbb to decimal
+  const r = (rgb >> 16) & 0xff; // extract red
+  const g = (rgb >> 8) & 0xff; // extract green
+  const b = (rgb >> 0) & 0xff; // extract blue
+
+  return r + g + b > 3 * 190;
 }
