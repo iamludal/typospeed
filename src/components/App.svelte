@@ -55,6 +55,7 @@
   }
 
   :global(button, input) {
+    font-family: var(--font-family);
     color: var(--color-secondary);
     outline: none;
     border: none;
