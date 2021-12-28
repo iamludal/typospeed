@@ -166,6 +166,11 @@
   .color-input--invalid {
     border: 0.2em solid var(--color-secondary-transparent);
   }
+
+  .color-input::placeholder {
+    color: var(--color-secondary);
+    opacity: 0.4;
+  }
   .input-error {
     position: absolute;
     top: 100%;
