@@ -15,7 +15,13 @@
   const GITHUB_LINK = 'https://github.com/iamludal/typospeed';
 
   export let scores: Scores = getScores();
-  let isNew: Boolean = userIsNew();
+  let rulesOpened: Boolean = userIsNew();
+
+  $: {
+    if (!rulesOpened) {
+      registerUser();
+    }
+  }
 
   const { best, last } = scores;
   const dispatch = createEventDispatcher();
@@ -36,13 +42,8 @@
   <button id="play" on:click={() => dispatch('start')}>
     <Icon icon={PlayCircle} />
   </button>
-  {#if isNew}
-    <Rules
-      on:click={() => {
-        registerUser();
-        isNew = false;
-      }}
-    />
+  {#if rulesOpened}
+    <Rules on:click={() => (rulesOpened = false)} />
   {:else}
     <div class="buttons" transition:fade={{ duration: 200 }}>
       <a
@@ -54,7 +55,7 @@
       >
         <Icon icon={FaGithubAlt} />
       </a>
-      <button class="help btn" title="Click me for help" on:click={() => (isNew = true)}>
+      <button class="help btn" title="Click me for help" on:click={() => (rulesOpened = true)}>
         <Icon icon={IoMdHelpCircle} />
       </button>
       <button class="btn" title="Settings" on:click={() => (settingsOpen = true)}>

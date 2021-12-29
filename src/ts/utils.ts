@@ -1,5 +1,4 @@
 import type { Scores, words } from './types';
-import { v4 as uuidv4, validate } from 'uuid';
 import { colors, COLOR_REGEX } from './constants';
 
 const WORDS_URL = '/assets/data/words.json';
@@ -58,14 +57,12 @@ export function saveScore(score: number): void {
 /**
  * Return true if the user is new (opening the game for the first time)
  */
-export function userIsNew(): Boolean {
-  const uuid = localStorage.getItem('uuid') || '';
-  return !validate(uuid);
-}
+export const userIsNew = (): Boolean => localStorage.getItem('isNew') === null;
 
-export function registerUser(): void {
-  localStorage.setItem('uuid', uuidv4());
-}
+/**
+ * Set the user as not new
+ */
+export const registerUser = (): void => localStorage.setItem('isNew', 'false');
 
 export function getColorTheme(): string {
   const colorTheme = localStorage.getItem('colorTheme') || colors[0];

@@ -26,7 +26,6 @@
   },
   "dependencies": {
     "robot3": "^0.2.18",
-    "svelte-icons": "^2.1.0",
-    "uuid": "^8.3.1"
+    "svelte-icons": "^2.1.0"
   }
 }
