@@ -1,5 +1,6 @@
 import type { Scores, words } from './types';
 import { colors, COLOR_REGEX } from './constants';
+import type { Settings } from './store';
 
 const WORDS_URL = '/assets/data/words.json';
 
@@ -55,27 +56,36 @@ export function saveScore(score: number): void {
 }
 
 /**
- * Return true if the user is new (opening the game for the first time)
+ * Load settings from local storage
+ * @returns the settings
  */
-export const userIsNew = (): Boolean => localStorage.getItem('isNew') === null;
+export const loadSettings = (): Settings => {
+  let settingsRaw: any;
+
+  try {
+    settingsRaw = JSON.parse(localStorage.getItem('settings'));
+  } catch {
+    settingsRaw = {};
+  }
+
+  const colorTheme = isValidColor(settingsRaw?.colorTheme) ? settingsRaw.colorTheme : colors[0];
+
+  const settings = {
+    colorTheme: colorTheme,
+    soundsEnabled: Boolean(settingsRaw?.soundsEnabled ?? true),
+    isNew: Boolean(settingsRaw?.isNew ?? true),
+  };
+
+  return settings;
+};
 
 /**
- * Set the user as not new
+ * Save settings into local storage
+ * @param settings the settings to save
  */
-export const registerUser = (): void => localStorage.setItem('isNew', 'false');
-
-export function getColorTheme(): string {
-  const colorTheme = localStorage.getItem('colorTheme') || colors[0];
-  if (!COLOR_REGEX.test(colorTheme) || isTooBright(colorTheme)) {
-    localStorage.setItem('colorTheme', colors[0]);
-    return colors[0];
-  }
-  return colorTheme;
-}
-
-export function setColorTheme(colorTheme: string): void {
-  localStorage.setItem('colorTheme', colorTheme);
-}
+export const saveSettings = (settings: Settings): void => {
+  localStorage.setItem('settings', JSON.stringify(settings));
+};
 
 /**
  * Determine whether or not a color is too bright to prevent the user
@@ -97,3 +107,12 @@ export function isTooBright(color: string): boolean {
 
   return r + g + b > 3 * 190;
 }
+
+/**
+ * Verify if a color is valid
+ * @param color the color to check
+ * @returns true if the color is valid, false otherwise
+ */
+export const isValidColor = (color: string): boolean => {
+  return COLOR_REGEX.test(color) && !isTooBright(color);
+};

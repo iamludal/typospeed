@@ -4,11 +4,14 @@
   import EndScreen from './EndScreen.svelte';
   import Game from '../ts/game';
   import type { GameService, States, words } from '../ts/types';
-  import { getScores, saveScore } from '../ts/utils';
+  import { getScores, loadSettings, saveScore } from '../ts/utils';
 
   export let wordsList: words;
 
   let state: States = 'IDLE';
+  let game: Game;
+
+  const settings = loadSettings();
 
   const handleStateChange = (gs: GameService) => {
     state = gs.machine.current;
@@ -16,12 +19,10 @@
     if (state == 'FINISHED') saveScore(game.score);
   };
 
-  let game;
-
   const setState = (newState: States) => (state = newState);
 
   const start = () => {
-    game = new Game(wordsList, handleStateChange);
+    game = new Game(wordsList, handleStateChange, settings.soundsEnabled);
     game.start();
   };
 </script>

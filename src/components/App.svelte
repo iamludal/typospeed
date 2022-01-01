@@ -1,6 +1,6 @@
 <script lang="ts">
   import Loader from './Loader.svelte';
-  import { getColorTheme, getWords } from '../ts/utils';
+  import { getWords } from '../ts/utils';
   import Game from './Game.svelte';
   import { settings } from '../ts/store';
   import { onMount } from 'svelte';
@@ -8,11 +8,6 @@
   const wordsPromise = getWords();
 
   onMount(() => {
-    settings.update(oldSettings => ({
-      ...oldSettings,
-      colorTheme: getColorTheme(),
-    }));
-
     settings.subscribe(newSettings => {
       document.documentElement.style.setProperty('--color-primary', newSettings.colorTheme);
     });
