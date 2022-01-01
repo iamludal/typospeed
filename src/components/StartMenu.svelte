@@ -1,7 +1,7 @@
 <script lang="ts">
   import { fade } from 'svelte/transition';
-  import { getScores, userIsNew, registerUser } from '../ts/utils';
-  import { createEventDispatcher } from 'svelte';
+  import { getScores } from '../ts/utils';
+  import { createEventDispatcher, onMount } from 'svelte';
   import PlayCircle from 'svelte-icons/md/MdPlayArrow.svelte';
   import FaMedal from 'svelte-icons/fa/FaMedal.svelte';
   import Rules from './Rules.svelte';
@@ -11,23 +11,29 @@
   import IoMdSettings from 'svelte-icons/io/IoMdSettings.svelte';
   import FaGithubAlt from 'svelte-icons/fa/FaGithubAlt.svelte';
   import Settings from './Settings.svelte';
+  import { settings } from '../ts/store';
 
   const GITHUB_LINK = 'https://github.com/iamludal/typospeed';
 
   export let scores: Scores = getScores();
-  let rulesOpened: Boolean = userIsNew();
-
-  $: {
-    if (!rulesOpened) {
-      registerUser();
-    }
-  }
+  let rulesOpened: boolean = false;
 
   const { best, last } = scores;
   const dispatch = createEventDispatcher();
 
   let settingsOpen = false;
   let hidden = false;
+
+  const hideRules = () => {
+    rulesOpened = false;
+    settings.update(oldSettings => ({ ...oldSettings, isNew: false }));
+  };
+
+  onMount(() => {
+    settings.subscribe(({ isNew }) => {
+      if (isNew) rulesOpened = true;
+    });
+  });
 </script>
 
 <div id="start-menu" class:hidden transition:fade={{ duration: 400 }}>
@@ -43,7 +49,7 @@
     <Icon icon={PlayCircle} />
   </button>
   {#if rulesOpened}
-    <Rules on:click={() => (rulesOpened = false)} />
+    <Rules on:click={hideRules} />
   {:else}
     <div class="buttons" transition:fade={{ duration: 200 }}>
       <a

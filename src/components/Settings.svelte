@@ -1,27 +1,28 @@
 <script lang="ts">
-  import { createEventDispatcher } from 'svelte';
+  import { createEventDispatcher, onMount } from 'svelte';
   import { fade } from 'svelte/transition';
   import IoMdClose from 'svelte-icons/io/IoMdClose.svelte';
   import IconButton from './shared/IconButton.svelte';
   import { colors, COLOR_REGEX } from '../ts/constants';
-  import { settings } from '../ts/store';
-  import { getColorTheme, isTooBright, setColorTheme } from '../ts/utils';
+  import { Settings, settings } from '../ts/store';
+  import { isTooBright, loadSettings } from '../ts/utils';
   import Icon from './shared/Icon.svelte';
   import IoMdCheckmark from 'svelte-icons/io/IoMdCheckmark.svelte';
   import MdDoNotDisturb from 'svelte-icons/md/MdDoNotDisturb.svelte';
 
-  let currenctColor: string = getColorTheme();
-
-  $: errorMessage = getErrorMessage(currenctColor);
+  let _settings: Settings = loadSettings();
+  $: errorMessage = getErrorMessage(_settings.colorTheme);
 
   const dispatch = createEventDispatcher();
 
   const close = () => dispatch('close');
 
+  const toggleSounds = () => {
+    settings.update(oldSettings => ({ ...oldSettings, soundsEnabled: _settings.soundsEnabled }));
+  };
+
   const setColor = (selectedColor: string) => {
     settings.update(oldSettings => ({ ...oldSettings, colorTheme: selectedColor }));
-    setColorTheme(selectedColor);
-    currenctColor = selectedColor;
   };
 
   const handleKeyUp = (e: KeyboardEvent) => {
@@ -41,9 +42,13 @@
 
   const handleInputChange = () => {
     if (errorMessage === null) {
-      setColor(currenctColor);
+      setColor(_settings.colorTheme);
     }
   };
+
+  onMount(() => {
+    settings.subscribe(newSettings => (_settings = newSettings));
+  });
 </script>
 
 <svelte:window on:keyup={handleKeyUp} />
@@ -52,16 +57,28 @@
   <div class="modal__content">
     <h1>Settings</h1>
 
+    <div class="close">
+      <IconButton on:click={close} icon={IoMdClose} />
+    </div>
+
+    <div class="section">
+      <span class="section__title">Sound effects</span>
+      <label class="switch section__content">
+        <input type="checkbox" bind:checked={_settings.soundsEnabled} on:change={toggleSounds} />
+        <span class="switch__slider" />
+      </label>
+    </div>
+
     <div class="section">
       <span class="section__title">Theme</span>
-      <div class="colors">
+      <div class="colors section__content">
         <div class="input-container">
           <input
             type="text"
             class="color-input"
             placeholder="#353535"
             class:color-input--invalid={errorMessage !== null}
-            bind:value={currenctColor}
+            bind:value={_settings.colorTheme}
             on:input={handleInputChange}
           />
           {#if errorMessage !== null}
@@ -73,20 +90,16 @@
         </div>
         {#each colors as color}
           <div
-            class={`color ${currenctColor === color ? 'color-active' : ''}`}
+            class={`color ${_settings.colorTheme === color ? 'color-active' : ''}`}
             style={`--color: ${color}`}
             on:click={() => setColor(color)}
           >
-            {#if currenctColor === color}
+            {#if _settings.colorTheme === color}
               <Icon icon={IoMdCheckmark} />
             {/if}
           </div>
         {/each}
       </div>
-    </div>
-
-    <div class="close">
-      <IconButton on:click={close} icon={IoMdClose} />
     </div>
   </div>
 </div>
@@ -115,13 +128,22 @@
   }
 
   .section {
-    display: flex;
+    display: grid;
+    grid-template-columns: auto 1fr;
     align-items: center;
     gap: 5rem;
   }
 
+  .section:not(:last-of-type) {
+    margin-bottom: 1.2em;
+  }
+
   .section__title {
     font-size: x-large;
+  }
+
+  .section__content {
+    justify-self: end;
   }
 
   .colors {
@@ -179,6 +201,50 @@
     width: max-content;
     font-size: small;
     margin-top: 0.25em;
+  }
+
+  .switch__slider {
+    position: relative;
+    padding: 0.1em;
+    display: inline-block;
+    width: 3em;
+    height: 1.5em;
+    border-radius: var(--radius-high);
+    background-color: var(--color-secondary-transparent);
+    cursor: pointer;
+    transition: filter 100ms;
+  }
+
+  .switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+    display: none;
+  }
+
+  .switch input + .switch__slider {
+    transition: opacity 100ms;
+    opacity: 0.5;
+  }
+
+  .switch input:checked + .switch__slider {
+    opacity: 1;
+  }
+
+  .switch input:checked + .switch__slider::before {
+    left: calc(100% - 1.5em);
+  }
+
+  .switch__slider::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    aspect-ratio: 1;
+    border-radius: 50%;
+    background-color: var(--color-secondary);
+    transition: all 100ms;
   }
 
   .close {
