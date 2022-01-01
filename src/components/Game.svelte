@@ -5,13 +5,15 @@
   import Game from '../ts/game';
   import type { GameService, States, words } from '../ts/types';
   import { getScores, loadSettings, saveScore } from '../ts/utils';
+  import { onMount } from 'svelte';
+  import { settings } from '../ts/store';
 
   export let wordsList: words;
 
   let state: States = 'IDLE';
   let game: Game;
 
-  const settings = loadSettings();
+  let soundsEnabled: boolean = loadSettings().soundsEnabled;
 
   const handleStateChange = (gs: GameService) => {
     state = gs.machine.current;
@@ -22,9 +24,13 @@
   const setState = (newState: States) => (state = newState);
 
   const start = () => {
-    game = new Game(wordsList, handleStateChange, settings.soundsEnabled);
+    game = new Game(wordsList, handleStateChange, soundsEnabled);
     game.start();
   };
+
+  onMount(() => {
+    settings.subscribe(settings => (soundsEnabled = settings.soundsEnabled));
+  });
 </script>
 
 {#if state == 'IDLE'}
