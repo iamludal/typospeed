@@ -99,6 +99,8 @@
     border-radius: var(--radius-high);
     background: var(--color-secondary-transparent);
     transition: transform var(--transition);
+    width: 25ch;
+    max-width: 100%;
   }
 
   .score {
