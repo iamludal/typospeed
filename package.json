@@ -13,6 +13,7 @@
     "@rollup/plugin-node-resolve": "^8.0.0",
     "@rollup/plugin-typescript": "^6.0.0",
     "@tsconfig/svelte": "^1.0.0",
+    "@types/howler": "^2.2.4",
     "rollup": "^2.3.4",
     "rollup-plugin-livereload": "^2.0.0",
     "rollup-plugin-svelte": "^6.0.0",
@@ -25,6 +26,7 @@
     "typescript": "^3.9.3"
   },
   "dependencies": {
+    "howler": "^2.2.3",
     "robot3": "^0.2.18",
     "svelte-icons": "^2.1.0"
   }

@@ -1,8 +1,11 @@
 import type { OnChangeListener, WordProps, words } from './types';
 import { interpret, Service } from 'robot3';
 import { GameMachine } from './types';
+import { Howl } from 'howler';
 
-const POINT_SOUND = '/assets/sounds/point.mp3';
+const pointSound = new Howl({
+  src: ['/assets/sounds/point.mp3'],
+});
 
 class Game {
   private _fallTime = 2 * 1000; // drop a word every 2 seconds
@@ -10,7 +13,7 @@ class Game {
   private _score = 0;
   private _wordsList: words;
   private _fallingWords: Array<WordProps> = [];
-  private _pointSound: HTMLAudioElement;
+  private _withSounds: boolean;
   private _wordsListener: Function;
   private _scoreListener: Function;
   private _intervals: { [key: string]: number } = {};
@@ -19,9 +22,7 @@ class Game {
   constructor(wordsList: words, stateListener: OnChangeListener, withSounds: boolean) {
     this._wordsList = wordsList;
     this.state = interpret(GameMachine, stateListener);
-    if (withSounds) {
-      this._pointSound = new Audio(POINT_SOUND);
-    }
+    this._withSounds = withSounds;
   }
 
   public start(): void {
@@ -71,7 +72,7 @@ class Game {
     if (valid) {
       const removed: WordProps = this.removeWord(word);
       this.applyScore(removed);
-      this._pointSound?.play();
+      if (this._withSounds) pointSound.play();
       clearInterval(removed.timeout);
     }
 
