@@ -2,6 +2,8 @@ import type { OnChangeListener, WordProps, words } from './types';
 import { interpret, Service } from 'robot3';
 import { GameMachine } from './types';
 
+const POINT_SOUND = '/assets/sounds/point.mp3';
+
 class Game {
   private _fallTime = 2 * 1000; // drop a word every 2 seconds
   private _duration = 10; // word time (in sec) to reach bottom of screen
@@ -14,10 +16,12 @@ class Game {
   private _intervals: { [key: string]: number } = {};
   private state: Service<typeof GameMachine>;
 
-  constructor(wordsList: words, stateListener: OnChangeListener) {
+  constructor(wordsList: words, stateListener: OnChangeListener, withSounds: boolean) {
     this._wordsList = wordsList;
-    this._pointSound = new Audio('assets/point.mp3');
     this.state = interpret(GameMachine, stateListener);
+    if (withSounds) {
+      this._pointSound = new Audio(POINT_SOUND);
+    }
   }
 
   public start(): void {
@@ -67,7 +71,7 @@ class Game {
     if (valid) {
       const removed: WordProps = this.removeWord(word);
       this.applyScore(removed);
-      this._pointSound.play();
+      this._pointSound?.play();
       clearInterval(removed.timeout);
     }
 
