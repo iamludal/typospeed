@@ -1,8 +1,8 @@
 import type { Scores, words } from './types';
-import { colors, COLOR_REGEX } from './constants';
+import { colors, COLOR_REGEX, LANGS } from './constants';
 import type { Settings } from './store';
 
-const WORDS_URL = '/assets/data/words.json';
+const WORDS_BASE_URL = '/assets/data/words-{LANG}.json';
 
 /**
  * Get the words list (from local storage or url), and store it if not stored
@@ -10,11 +10,14 @@ const WORDS_URL = '/assets/data/words.json';
  * @returns a Promise, which resolves in the words list (array of string)
  */
 export async function getWords(): Promise<words> {
-  let wordsList: words = JSON.parse(localStorage.getItem('words'));
+  const settings = loadSettings();
+  const wordsKey = `words-${settings.language}`;
+
+  let wordsList: words = JSON.parse(localStorage.getItem(wordsKey));
 
   if (!wordsList) {
-    wordsList = await fetchWordsList();
-    localStorage.setItem('words', JSON.stringify(wordsList));
+    wordsList = await fetchWordsList(settings.language);
+    localStorage.setItem(wordsKey, JSON.stringify(wordsList));
   }
 
   return wordsList;
@@ -25,8 +28,9 @@ export async function getWords(): Promise<words> {
  *
  * @returns a Promise, which resolves in the words list (array of string)
  */
-async function fetchWordsList(): Promise<words> {
-  return fetch(WORDS_URL).then(data => data.json());
+async function fetchWordsList(lang: string): Promise<words> {
+  const url = WORDS_BASE_URL.replace('{LANG}', lang);
+  return fetch(url).then(data => data.json());
 }
 
 /**
@@ -69,11 +73,13 @@ export const loadSettings = (): Settings => {
   }
 
   const colorTheme = isValidColor(settingsRaw?.colorTheme) ? settingsRaw.colorTheme : colors[0];
+  const langIsValid = isValidLang(settingsRaw?.language ?? '');
 
   const settings = {
     colorTheme: colorTheme,
-    soundsEnabled: Boolean(settingsRaw?.soundsEnabled ?? true),
     isNew: Boolean(settingsRaw?.isNew ?? true),
+    language: langIsValid ? settingsRaw.language : LANGS[0],
+    soundsEnabled: Boolean(settingsRaw?.soundsEnabled ?? true),
   };
 
   return settings;
@@ -116,3 +122,10 @@ export function isTooBright(color: string): boolean {
 export const isValidColor = (color: string): boolean => {
   return COLOR_REGEX.test(color) && !isTooBright(color);
 };
+
+/**
+ * Verify if a language is valid
+ * @param lang the language to check
+ * @returns true if the language is valid, false otherwise
+ */
+const isValidLang = (lang: string) => LANGS.includes(lang.toLowerCase());
