@@ -3,20 +3,21 @@
   import IoMdHelpCircle from 'svelte-icons/io/IoMdHelpCircle.svelte';
   import MdClose from 'svelte-icons/md/MdClose.svelte';
   import Icon from './shared/Icon.svelte';
+  import { _ } from 'svelte-i18n';
 </script>
 
 <div class="container" transition:fly={{ x: 40, duration: 400 }}>
   <div class="header">
     <h1>
-      <Icon icon={IoMdHelpCircle} /> How to play?
+      <Icon icon={IoMdHelpCircle} />
+      {$_('rules.title')}
     </h1>
     <button class="close" on:click>
       <MdClose />
     </button>
   </div>
   <p>
-    As soon as you'll start the game, words are going to fall out. Type them as fast as possible to
-    remove them. If a word reaches the bottom of the screen, you'll loose the game. Good luck!
+    {$_('rules.description')}
   </p>
 </div>
 

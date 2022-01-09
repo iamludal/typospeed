@@ -12,6 +12,7 @@
   import FaGithubAlt from 'svelte-icons/fa/FaGithubAlt.svelte';
   import Settings from './Settings.svelte';
   import { settings } from '../ts/store';
+  import { _ } from 'svelte-i18n';
 
   const GITHUB_LINK = 'https://github.com/iamludal/typospeed';
 
@@ -40,10 +41,11 @@
   <div id="scores">
     <div>
       <Icon icon={FaMedal} />
-      Best score:
-      <strong>{best}</strong>
+      {@html $_('menu.best-score', { values: { score: best } })}
     </div>
-    <div>Last score: <strong>{last}</strong></div>
+    <div>
+      {@html $_('menu.last-score', { values: { score: last } })}
+    </div>
   </div>
   <button id="play" on:click={() => dispatch('start')}>
     <Icon icon={PlayCircle} />

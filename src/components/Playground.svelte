@@ -6,6 +6,7 @@
   import { fade } from 'svelte/transition';
   import MdStars from 'svelte-icons/md/MdStars.svelte';
   import Icon from './shared/Icon.svelte';
+  import { _ } from 'svelte-i18n';
 
   export let game: Game;
 
@@ -52,7 +53,8 @@
   </div>
   <div class="bottom-bar">
     <div class="score">
-      <Icon icon={MdStars} /> Score: {score}
+      <Icon icon={MdStars} />
+      {$_('playground.score', { values: { score } })}
     </div>
     <input
       class="input"

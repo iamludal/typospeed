@@ -1,35 +1,18 @@
 import type { Scores, words } from './types';
-import { colors, COLOR_REGEX, LANGS } from './constants';
+import { colors, COLOR_REGEX, Lang, LANGS } from './constants';
 import type { Settings } from './store';
+import { getLocaleFromNavigator } from 'svelte-i18n';
 
 const WORDS_BASE_URL = '/assets/data/words-{LANG}.json';
-
-/**
- * Get the words list (from local storage or url), and store it if not stored
- *
- * @returns a Promise, which resolves in the words list (array of string)
- */
-export async function getWords(): Promise<words> {
-  const settings = loadSettings();
-  const wordsKey = `words-${settings.language}`;
-
-  let wordsList: words = JSON.parse(localStorage.getItem(wordsKey));
-
-  if (!wordsList) {
-    wordsList = await fetchWordsList(settings.language);
-    localStorage.setItem(wordsKey, JSON.stringify(wordsList));
-  }
-
-  return wordsList;
-}
 
 /**
  * Fetch the words list
  *
  * @returns a Promise, which resolves in the words list (array of string)
  */
-async function fetchWordsList(lang: string): Promise<words> {
-  const url = WORDS_BASE_URL.replace('{LANG}', lang);
+export async function fetchWordsList(): Promise<words> {
+  const settings = loadSettings();
+  const url = WORDS_BASE_URL.replace('{LANG}', settings.language);
   return fetch(url).then(data => data.json());
 }
 
@@ -73,12 +56,11 @@ export const loadSettings = (): Settings => {
   }
 
   const colorTheme = isValidColor(settingsRaw?.colorTheme) ? settingsRaw.colorTheme : colors[0];
-  const langIsValid = isValidLang(settingsRaw?.language ?? '');
 
   const settings = {
     colorTheme: colorTheme,
     isNew: Boolean(settingsRaw?.isNew ?? true),
-    language: langIsValid ? settingsRaw.language : LANGS[0],
+    language: getLanguage(settingsRaw?.language),
     soundsEnabled: Boolean(settingsRaw?.soundsEnabled ?? true),
   };
 
@@ -124,8 +106,18 @@ export const isValidColor = (color: string): boolean => {
 };
 
 /**
- * Verify if a language is valid
- * @param lang the language to check
- * @returns true if the language is valid, false otherwise
+ * Get the correct language
+ * @param lang the initial language, that may be valid or not
+ * @returns the correct language
  */
-const isValidLang = (lang: string) => LANGS.includes(lang.toLowerCase());
+const getLanguage = (lang?: string): Lang => {
+  if (!lang) {
+    lang = getLocaleFromNavigator();
+  }
+
+  if (lang in LANGS) {
+    return lang as Lang;
+  }
+
+  return 'en';
+};

@@ -6,6 +6,7 @@
   import MdMenu from 'svelte-icons/md/MdMenu.svelte';
   import FaRegSadCry from 'svelte-icons/fa/FaRegSadCry.svelte';
   import Icon from './shared/Icon.svelte';
+  import { _ } from 'svelte-i18n';
 
   export let scores: Scores;
 
@@ -15,19 +16,21 @@
 </script>
 
 <div class="wrapper" out:fade={{ duration: 200 }} in:fade={{ duration: 800 }}>
-  <h1>
-    <Icon icon={FaRegSadCry} /> Game Over!
-  </h1>
+  <Icon icon={FaRegSadCry} style="font-size: 3em" />
 
-  <h2>Your score: {last}</h2>
-  <p>Best score: {best}</p>
+  <h1>{$_('game-over.title')}</h1>
 
-  <div>
+  <h2>{$_('game-over.last-score', { values: { score: last } })}</h2>
+  <p>{$_('game-over.best-score', { values: { score: best } })}</p>
+
+  <div class="btns">
     <button class="btn" on:click={() => dispatch('menu')}>
-      <Icon icon={MdMenu} /> Menu
+      <Icon icon={MdMenu} />
+      {$_('game-over.menu')}
     </button>
     <button class="btn" on:click={() => dispatch('playagain')}>
-      <Icon icon={PlayCircle} /> Play again
+      <Icon icon={PlayCircle} />
+      {$_('game-over.play-again')}
     </button>
   </div>
 </div>
@@ -41,6 +44,14 @@
     position: absolute;
     height: 100%;
     width: 100%;
+  }
+
+  h2 {
+    margin-bottom: 0;
+  }
+
+  .btns {
+    margin-top: 1rem;
   }
 
   .btn {
