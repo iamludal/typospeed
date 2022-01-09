@@ -26,7 +26,7 @@
 
   onMount(() => handleBlur());
 
-  const handleBlur = () => input.focus();
+  const handleBlur = () => setTimeout(() => input.focus(), 0);
   const resetInput = () => (typedWord = '');
   const setValidInput = () => (invalidInput = false);
 
