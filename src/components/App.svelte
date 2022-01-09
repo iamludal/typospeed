@@ -1,16 +1,21 @@
 <script lang="ts">
   import Loader from './Loader.svelte';
-  import { fetchWordsList } from '../ts/utils';
+  import { fetchWordsList, loadSettings } from '../ts/utils';
   import Game from './Game.svelte';
   import { settings } from '../ts/store';
   import { onMount } from 'svelte';
   import { _ } from 'svelte-i18n';
 
-  const wordsPromise = fetchWordsList();
+  let wordsPromise = fetchWordsList();
+  let lang = loadSettings().language;
 
   onMount(() => {
     settings.subscribe(newSettings => {
       document.documentElement.style.setProperty('--color-primary', newSettings.colorTheme);
+      if (newSettings.language !== lang) {
+        lang = newSettings.language;
+        wordsPromise = fetchWordsList();
+      }
     });
   });
 </script>
