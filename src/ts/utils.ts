@@ -1,32 +1,19 @@
 import type { Scores, words } from './types';
-import { colors, COLOR_REGEX } from './constants';
+import { colors, COLOR_REGEX, Lang, LANGS } from './constants';
 import type { Settings } from './store';
+import { getLocaleFromNavigator } from 'svelte-i18n';
 
-const WORDS_URL = '/assets/data/words.json';
-
-/**
- * Get the words list (from local storage or url), and store it if not stored
- *
- * @returns a Promise, which resolves in the words list (array of string)
- */
-export async function getWords(): Promise<words> {
-  let wordsList: words = JSON.parse(localStorage.getItem('words'));
-
-  if (!wordsList) {
-    wordsList = await fetchWordsList();
-    localStorage.setItem('words', JSON.stringify(wordsList));
-  }
-
-  return wordsList;
-}
+const WORDS_BASE_URL = '/assets/data/words-{LANG}.json';
 
 /**
  * Fetch the words list
  *
  * @returns a Promise, which resolves in the words list (array of string)
  */
-async function fetchWordsList(): Promise<words> {
-  return fetch(WORDS_URL).then(data => data.json());
+export async function fetchWordsList(): Promise<words> {
+  const settings = loadSettings();
+  const url = WORDS_BASE_URL.replace('{LANG}', settings.language);
+  return fetch(url).then(data => data.json());
 }
 
 /**
@@ -72,8 +59,9 @@ export const loadSettings = (): Settings => {
 
   const settings = {
     colorTheme: colorTheme,
-    soundsEnabled: Boolean(settingsRaw?.soundsEnabled ?? true),
     isNew: Boolean(settingsRaw?.isNew ?? true),
+    language: getLanguage(settingsRaw?.language),
+    soundsEnabled: Boolean(settingsRaw?.soundsEnabled ?? true),
   };
 
   return settings;
@@ -115,4 +103,21 @@ export function isTooBright(color: string): boolean {
  */
 export const isValidColor = (color: string): boolean => {
   return COLOR_REGEX.test(color) && !isTooBright(color);
+};
+
+/**
+ * Get the correct language
+ * @param lang the initial language, that may be valid or not
+ * @returns the correct language
+ */
+const getLanguage = (lang?: string): Lang => {
+  if (!lang) {
+    lang = getLocaleFromNavigator();
+  }
+
+  if (lang in LANGS) {
+    return lang as Lang;
+  }
+
+  return 'en';
 };

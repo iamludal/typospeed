@@ -12,6 +12,7 @@
   import FaGithubAlt from 'svelte-icons/fa/FaGithubAlt.svelte';
   import Settings from './Settings.svelte';
   import { settings } from '../ts/store';
+  import { _ } from 'svelte-i18n';
 
   const GITHUB_LINK = 'https://github.com/iamludal/typospeed';
 
@@ -40,10 +41,11 @@
   <div id="scores">
     <div>
       <Icon icon={FaMedal} />
-      Best score:
-      <strong>{best}</strong>
+      {@html $_('menu.best-score', { values: { score: best } })}
     </div>
-    <div>Last score: <strong>{last}</strong></div>
+    <div>
+      {@html $_('menu.last-score', { values: { score: last } })}
+    </div>
   </div>
   <button id="play" on:click={() => dispatch('start')}>
     <Icon icon={PlayCircle} />
@@ -56,15 +58,15 @@
         href={GITHUB_LINK}
         target="_blank"
         rel="noreferrer noopener"
-        title="Star me on GitHub"
+        title={$_('menu.items.github')}
         class="btn"
       >
         <Icon icon={FaGithubAlt} />
       </a>
-      <button class="help btn" title="Click me for help" on:click={() => (rulesOpened = true)}>
+      <button class="help btn" title={$_('menu.items.rules')} on:click={() => (rulesOpened = true)}>
         <Icon icon={IoMdHelpCircle} />
       </button>
-      <button class="btn" title="Settings" on:click={() => (settingsOpen = true)}>
+      <button class="btn" title={$_('common.settings')} on:click={() => (settingsOpen = true)}>
         <Icon icon={IoMdSettings} />
       </button>
     </div>

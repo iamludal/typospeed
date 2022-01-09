@@ -1,0 +1,33 @@
+{
+  "common": {
+    "error": "Désolé, une erreur est survenue. Veuillez réessayer plus tard.",
+    "settings": "Paramètres"
+  },
+  "menu": {
+    "best-score": "Record personnel : <b>{score}</b>",
+    "last-score": "Dernier score : <b>{score}</b>",
+    "items": {
+      "github": "GitHub",
+      "rules": "Règles du jeu"
+    }
+  },
+  "rules": {
+    "title": "Règles du jeu",
+    "description": "Au lancement de la partie, des mots vont commencer à tomber. Tapez-les le plus vite possible pour les supprimer. Si un mot atteint le bas de l'écran, vous avez perdu. Bonne chance!"
+  },
+  "settings": {
+    "language": "Langue",
+    "sound-effects": "Sons",
+    "theme": "Thème"
+  },
+  "playground": {
+    "score": "Score : {score}"
+  },
+  "game-over": {
+    "title": "Game Over",
+    "last-score": "Votre score : {score}",
+    "best-score": "Record personnel : {score}",
+    "menu": "Menu",
+    "play-again": "Rejouer"
+  }
+}

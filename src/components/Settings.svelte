@@ -3,12 +3,13 @@
   import { fade } from 'svelte/transition';
   import IoMdClose from 'svelte-icons/io/IoMdClose.svelte';
   import IconButton from './shared/IconButton.svelte';
-  import { colors, COLOR_REGEX } from '../ts/constants';
+  import { colors, COLOR_REGEX, LANGS } from '../ts/constants';
   import { Settings, settings } from '../ts/store';
   import { isTooBright, loadSettings } from '../ts/utils';
   import Icon from './shared/Icon.svelte';
   import IoMdCheckmark from 'svelte-icons/io/IoMdCheckmark.svelte';
   import MdDoNotDisturb from 'svelte-icons/md/MdDoNotDisturb.svelte';
+  import { locale, _ } from 'svelte-i18n';
 
   let _settings: Settings = loadSettings();
   $: errorMessage = getErrorMessage(_settings.colorTheme);
@@ -46,6 +47,12 @@
     }
   };
 
+  // handle select change event
+  const handleLanguageChange = (newLanguage: string) => {
+    settings.update(oldSettings => ({ ...oldSettings, language: newLanguage }));
+    locale.set(newLanguage);
+  };
+
   onMount(() => {
     settings.subscribe(newSettings => (_settings = newSettings));
   });
@@ -55,14 +62,23 @@
 
 <div class="modal" transition:fade={{ duration: 200 }} on:click|self={close}>
   <div class="modal__content">
-    <h1>Settings</h1>
+    <h1>{$_('common.settings')}</h1>
 
     <div class="close">
       <IconButton on:click={close} icon={IoMdClose} />
     </div>
 
     <div class="section">
-      <span class="section__title">Sound effects</span>
+      <span class="section__title">{$_('settings.language')}</span>
+      <select class="section__content" bind:value={_settings.language}>
+        {#each Object.entries(LANGS) as [key, value]}
+          <option value={key} on:click={() => handleLanguageChange(key)}>{value}</option>
+        {/each}
+      </select>
+    </div>
+
+    <div class="section">
+      <span class="section__title">{$_('settings.sound-effects')}</span>
       <label class="switch section__content">
         <input type="checkbox" bind:checked={_settings.soundsEnabled} on:change={toggleSounds} />
         <span class="switch__slider" />
@@ -70,7 +86,7 @@
     </div>
 
     <div class="section">
-      <span class="section__title">Theme</span>
+      <span class="section__title">{$_('settings.theme')}</span>
       <div class="colors section__content">
         <div class="input-container">
           <input
@@ -120,6 +136,7 @@
     padding: 2rem;
     border-radius: 0.5rem;
     position: relative;
+    max-width: 32rem;
   }
 
   h1 {
@@ -129,7 +146,7 @@
 
   .section {
     display: grid;
-    grid-template-columns: auto 1fr;
+    grid-template-columns: 3fr 2fr;
     align-items: center;
     gap: 5rem;
   }
@@ -144,6 +161,16 @@
 
   .section__content {
     justify-self: end;
+  }
+
+  select {
+    cursor: pointer;
+    width: max-content;
+    color: var(--color-secondary);
+    border-radius: 0.4em;
+    border: 0.2em solid var(--color-secondary-transparent);
+    background-color: transparent;
+    font-size: large;
   }
 
   .colors {

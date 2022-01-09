@@ -1,0 +1,33 @@
+{
+  "common": {
+    "error": "Sorry, an error occurred. Please try again later.",
+    "settings": "Settings"
+  },
+  "menu": {
+    "best-score": "Best score: <b>{score}</b>",
+    "last-score": "Last score: <b>{score}</b>",
+    "items": {
+      "github": "Star me on GitHub",
+      "rules": "Display rules"
+    }
+  },
+  "rules": {
+    "title": "How to play?",
+    "description": "As soon as you'll start the game, words are going to fall out. Type them as fast as possible to remove them. If a word reaches the bottom of the screen, you'll loose the game. Good luck!"
+  },
+  "settings": {
+    "language": "Language",
+    "sound-effects": "Sound effects",
+    "theme": "Theme"
+  },
+  "playground": {
+    "score": "Score: {score}"
+  },
+  "game-over": {
+    "title": "Game Over",
+    "last-score": "Your score: {score}",
+    "best-score": "Best score: {score}",
+    "menu": "Menu",
+    "play-again": "Play again"
+  }
+}

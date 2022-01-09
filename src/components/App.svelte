@@ -1,15 +1,21 @@
 <script lang="ts">
   import Loader from './Loader.svelte';
-  import { getWords } from '../ts/utils';
+  import { fetchWordsList, loadSettings } from '../ts/utils';
   import Game from './Game.svelte';
   import { settings } from '../ts/store';
   import { onMount } from 'svelte';
+  import { _ } from 'svelte-i18n';
 
-  const wordsPromise = getWords();
+  let wordsPromise = fetchWordsList();
+  let lang = loadSettings().language;
 
   onMount(() => {
     settings.subscribe(newSettings => {
       document.documentElement.style.setProperty('--color-primary', newSettings.colorTheme);
+      if (newSettings.language !== lang) {
+        lang = newSettings.language;
+        wordsPromise = fetchWordsList();
+      }
     });
   });
 </script>
@@ -18,8 +24,8 @@
   <Loader />
 {:then wordsList}
   <Game {wordsList} />
-{:catch e}
-  <p class="error">An error occurred: {e.message}</p>
+{:catch}
+  <p class="error">{$_('common.error')}</p>
 {/await}
 
 <style>
