@@ -70,7 +70,7 @@
 
     <div class="section">
       <span class="section__title">{$_('settings.language')}</span>
-      <select bind:value={_settings.language}>
+      <select class="section__content" bind:value={_settings.language}>
         {#each Object.entries(LANGS) as [key, value]}
           <option value={key} on:click={() => handleLanguageChange(key)}>{value}</option>
         {/each}
@@ -136,6 +136,7 @@
     padding: 2rem;
     border-radius: 0.5rem;
     position: relative;
+    max-width: 32rem;
   }
 
   h1 {
@@ -145,7 +146,7 @@
 
   .section {
     display: grid;
-    grid-template-columns: auto 1fr;
+    grid-template-columns: 3fr 2fr;
     align-items: center;
     gap: 5rem;
   }
@@ -160,6 +161,16 @@
 
   .section__content {
     justify-self: end;
+  }
+
+  select {
+    cursor: pointer;
+    width: max-content;
+    color: var(--color-secondary);
+    border-radius: 0.4em;
+    border: 0.2em solid var(--color-secondary-transparent);
+    background-color: transparent;
+    font-size: large;
   }
 
   .colors {
