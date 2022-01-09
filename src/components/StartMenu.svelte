@@ -58,15 +58,15 @@
         href={GITHUB_LINK}
         target="_blank"
         rel="noreferrer noopener"
-        title="Star me on GitHub"
+        title={$_('menu.items.github')}
         class="btn"
       >
         <Icon icon={FaGithubAlt} />
       </a>
-      <button class="help btn" title="Click me for help" on:click={() => (rulesOpened = true)}>
+      <button class="help btn" title={$_('menu.items.rules')} on:click={() => (rulesOpened = true)}>
         <Icon icon={IoMdHelpCircle} />
       </button>
-      <button class="btn" title="Settings" on:click={() => (settingsOpen = true)}>
+      <button class="btn" title={$_('common.settings')} on:click={() => (settingsOpen = true)}>
         <Icon icon={IoMdSettings} />
       </button>
     </div>

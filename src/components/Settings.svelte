@@ -62,7 +62,7 @@
 
 <div class="modal" transition:fade={{ duration: 200 }} on:click|self={close}>
   <div class="modal__content">
-    <h1>{$_('settings.title')}</h1>
+    <h1>{$_('common.settings')}</h1>
 
     <div class="close">
       <IconButton on:click={close} icon={IoMdClose} />
