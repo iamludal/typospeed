@@ -835,10 +835,10 @@ svelte-check@^1.0.0:
     svelte-preprocess "^4.0.0"
     typescript "*"
 
-svelte-i18n@^3.3.13:
-  version "3.3.13"
-  resolved "https://registry.yarnpkg.com/svelte-i18n/-/svelte-i18n-3.3.13.tgz#05350bb86291de604cc6365f1105c11fbff54c76"
-  integrity sha512-RQM+ys4+Y9ztH//tX22H1UL2cniLNmIR+N4xmYygV6QpQ6EyQvloZiENRew8XrVzfvJ8HaE8NU6/yurLkl7z3g==
+svelte-i18n@^3.4.0:
+  version "3.4.0"
+  resolved "https://registry.yarnpkg.com/svelte-i18n/-/svelte-i18n-3.4.0.tgz#75838fba5bc680e39b421bb5c33fc3463aaa85f4"
+  integrity sha512-590N+YIRlebDT3fXmuAxd4guQZLR3vm4kCs5UhWYmw3SxOlJNZ7HwYYiw6d4jDr7P+Cx7DSopk1Z1K9wn8B6EA==
   dependencies:
     deepmerge "^4.2.2"
     estree-walker "^2.0.1"
