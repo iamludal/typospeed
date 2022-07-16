@@ -1,18 +1,17 @@
 <script lang="ts">
   import { fade } from 'svelte/transition';
-  import { getScores } from '../ts/utils';
   import { createEventDispatcher, onMount } from 'svelte';
   import PlayCircle from 'svelte-icons/md/MdPlayArrow.svelte';
   import FaMedal from 'svelte-icons/fa/FaMedal.svelte';
   import Rules from './Rules.svelte';
   import Icon from './shared/Icon.svelte';
-  import type { Scores } from '../ts/types';
   import IoMdHelpCircle from 'svelte-icons/io/IoMdHelpCircle.svelte';
   import IoMdSettings from 'svelte-icons/io/IoMdSettings.svelte';
   import FaGithubAlt from 'svelte-icons/fa/FaGithubAlt.svelte';
   import Settings from './Settings.svelte';
-  import { settings } from '../ts/store';
+  import settings from '../store/settings';
   import { _ } from 'svelte-i18n';
+  import { getScores, Scores } from '../services/score';
 
   const GITHUB_LINK = 'https://github.com/iamludal/typospeed';
 
@@ -27,12 +26,12 @@
 
   const hideRules = () => {
     rulesOpened = false;
-    settings.update(oldSettings => ({ ...oldSettings, isNew: false }));
+    settings.update(oldSettings => ({ ...oldSettings, showRules: false }));
   };
 
   onMount(() => {
-    settings.subscribe(({ isNew }) => {
-      if (isNew) rulesOpened = true;
+    settings.subscribe(({ showRules }) => {
+      if (showRules) rulesOpened = true;
     });
   });
 </script>

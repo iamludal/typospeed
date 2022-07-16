@@ -1,17 +1,23 @@
 <script lang="ts">
   import Loader from './Loader.svelte';
-  import { fetchWordsList, loadSettings } from '../ts/utils';
   import Game from './Game.svelte';
-  import { settings } from '../ts/store';
+  import settings from '../store/settings';
   import { onMount } from 'svelte';
   import { _ } from 'svelte-i18n';
+  import Color from 'color';
+  import { fetchWordsList } from '../services/words';
+  import { loadSettings } from '../services/settings';
 
   let wordsPromise = fetchWordsList();
   let lang = loadSettings().language;
 
   onMount(() => {
     settings.subscribe(newSettings => {
-      document.documentElement.style.setProperty('--color-primary', newSettings.colorTheme);
+      const { style } = document.documentElement;
+      const white = Color('white');
+      style.setProperty('--color-primary', newSettings.colorTheme.hex());
+      style.setProperty('--color-secondary', white.hex());
+      style.setProperty('--color-secondary-transparent', white.alpha(0.2).string());
       if (newSettings.language !== lang) {
         lang = newSettings.language;
         wordsPromise = fetchWordsList();
@@ -30,8 +36,6 @@
 
 <style>
   :global(:root) {
-    --color-secondary: #fff;
-    --color-secondary-transparent: rgba(255, 255, 255, 0.15);
     --font-family: 'Montserrat';
     --transition: 0.3s;
     --radius-high: 500em;

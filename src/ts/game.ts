@@ -1,4 +1,4 @@
-import type { OnChangeListener, WordProps, words } from './types';
+import type { OnChangeListener, WordProps, Words } from './types';
 import { interpret, Service } from 'robot3';
 import { GameMachine } from './types';
 import { Howl } from 'howler';
@@ -11,7 +11,7 @@ class Game {
   private _fallTime = 2 * 1000; // drop a word every 2 seconds
   private _duration = 10; // word time (in sec) to reach bottom of screen
   private _score = 0;
-  private _wordsList: words;
+  private _wordsList: Words;
   private _fallingWords: Array<WordProps> = [];
   private _withSounds: boolean;
   private _wordsListener: Function;
@@ -19,7 +19,7 @@ class Game {
   private _intervals: { [key: string]: number } = {};
   private state: Service<typeof GameMachine>;
 
-  constructor(wordsList: words, stateListener: OnChangeListener, withSounds: boolean) {
+  constructor(wordsList: Words, stateListener: OnChangeListener, withSounds: boolean) {
     this._wordsList = wordsList;
     this.state = interpret(GameMachine, stateListener);
     this._withSounds = withSounds;

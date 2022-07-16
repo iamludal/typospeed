@@ -1,12 +1,12 @@
 <script lang="ts">
   import { onMount } from 'svelte/internal';
   import type Game from '../ts/game';
-  import type { WordProps } from '../ts/types';
   import Word from './Word.svelte';
   import { fade } from 'svelte/transition';
   import MdStars from 'svelte-icons/md/MdStars.svelte';
   import Icon from './shared/Icon.svelte';
   import { _ } from 'svelte-i18n';
+  import type { WordProps } from '../services/words';
 
   export let game: Game;
 

@@ -1,6 +1,6 @@
 <script lang="ts">
-  import type { WordProps } from '../ts/types';
   import { fade } from 'svelte/transition';
+  import type { WordProps } from '../services/words';
 
   export let props: WordProps;
 

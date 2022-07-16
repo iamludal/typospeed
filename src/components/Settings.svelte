@@ -3,28 +3,23 @@
   import { fade } from 'svelte/transition';
   import IoMdClose from 'svelte-icons/io/IoMdClose.svelte';
   import IconButton from './shared/IconButton.svelte';
-  import { colors, COLOR_REGEX, LANGS } from '../ts/constants';
-  import { Settings, settings } from '../ts/store';
-  import { isTooBright, loadSettings } from '../ts/utils';
+  import { defaultColors, LANGS } from '../ts/constants';
+  import settings, { Settings } from '../store/settings';
   import Icon from './shared/Icon.svelte';
   import IoMdCheckmark from 'svelte-icons/io/IoMdCheckmark.svelte';
   import MdDoNotDisturb from 'svelte-icons/md/MdDoNotDisturb.svelte';
-  import { locale, _ } from 'svelte-i18n';
+  import { _ } from 'svelte-i18n';
+  import Color from 'color';
+  import { loadSettings, setColorTheme, setLanguage, setSoundsEnabled } from '../services/settings';
 
-  let _settings: Settings = loadSettings();
-  $: errorMessageKey = getErrorMessageKey(_settings.colorTheme);
+  let localSettings: Settings = loadSettings();
+
+  let colorInput = localSettings.colorTheme.hex();
+  $: colorErrorMessageKey = getColorErrorMessageKey(colorInput);
 
   const dispatch = createEventDispatcher();
 
   const close = () => dispatch('close');
-
-  const toggleSounds = () => {
-    settings.update(oldSettings => ({ ...oldSettings, soundsEnabled: _settings.soundsEnabled }));
-  };
-
-  const setColor = (selectedColor: string) => {
-    settings.update(oldSettings => ({ ...oldSettings, colorTheme: selectedColor }));
-  };
 
   const handleKeyUp = (e: KeyboardEvent) => {
     if (e.key === 'Escape') {
@@ -32,29 +27,40 @@
     }
   };
 
-  const getErrorMessageKey = (color: string) => {
-    if (!COLOR_REGEX.test(color)) {
+  const getColorErrorMessageKey = (colorStr: string) => {
+    let color: Color;
+
+    try {
+      color = Color(colorStr);
+    } catch {
       return 'color-invalid';
-    } else if (isTooBright(color)) {
+    }
+
+    if (color.contrast(Color('#fff')) < 1.5) {
       return 'color-too-bright';
     }
+
     return null;
   };
 
-  const handleInputChange = () => {
-    if (errorMessageKey === null) {
-      setColor(_settings.colorTheme);
-    }
+  const handleColorInputChange = () => {
+    if (colorErrorMessageKey !== null) return;
+
+    updateColorTheme(localSettings.colorTheme);
   };
 
-  // handle select change event
-  const handleLanguageChange = () => {
-    settings.update(oldSettings => ({ ...oldSettings, language: _settings.language }));
-    locale.set(_settings.language);
+  const updateColorTheme = (color: Color) => {
+    setColorTheme(color);
+    console.log(color.hex());
+    colorInput = color.hex();
   };
+
+  const handleLanguageChange = () => setLanguage(localSettings.language);
+
+  const handleSoundsChange = () => setSoundsEnabled(localSettings.soundsEnabled);
 
   onMount(() => {
-    settings.subscribe(newSettings => (_settings = newSettings));
+    settings.subscribe(newSettings => (localSettings = newSettings));
   });
 </script>
 
@@ -73,7 +79,7 @@
       <span class="section__title">{$_('settings.language')}</span>
       <select
         class="section__content"
-        bind:value={_settings.language}
+        bind:value={localSettings.language}
         on:change={handleLanguageChange}
       >
         {#each Object.entries(LANGS) as [key, value]}
@@ -86,7 +92,11 @@
     <div class="section">
       <span class="section__title">{$_('settings.sound-effects')}</span>
       <label class="switch section__content">
-        <input type="checkbox" bind:checked={_settings.soundsEnabled} on:change={toggleSounds} />
+        <input
+          type="checkbox"
+          bind:checked={localSettings.soundsEnabled}
+          on:change={handleSoundsChange}
+        />
         <span class="switch__slider" />
       </label>
     </div>
@@ -100,24 +110,24 @@
             type="text"
             class="color-input"
             placeholder="#353535"
-            class:color-input--invalid={errorMessageKey !== null}
-            bind:value={_settings.colorTheme}
-            on:input={handleInputChange}
+            class:color-input--invalid={colorErrorMessageKey !== null}
+            bind:value={colorInput}
+            on:input={handleColorInputChange}
           />
-          {#if errorMessageKey !== null}
+          {#if colorErrorMessageKey !== null}
             <div class="input-error">
               <Icon icon={MdDoNotDisturb} />
-              {$_(`settings.theme.errors.${errorMessageKey}`)}
+              {$_(`settings.theme.errors.${colorErrorMessageKey}`)}
             </div>
           {/if}
         </div>
-        {#each colors as color}
+        {#each defaultColors as color}
           <div
-            class={`color ${_settings.colorTheme === color ? 'color-active' : ''}`}
+            class={`color ${localSettings.colorTheme === color ? 'color-active' : ''}`}
             style={`--color: ${color}`}
-            on:click={() => setColor(color)}
+            on:click={() => updateColorTheme(color)}
           >
-            {#if _settings.colorTheme === color}
+            {#if localSettings.colorTheme === color}
               <Icon icon={IoMdCheckmark} />
             {/if}
           </div>

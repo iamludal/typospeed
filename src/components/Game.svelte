@@ -3,12 +3,14 @@
   import StartMenu from './StartMenu.svelte';
   import EndScreen from './EndScreen.svelte';
   import Game from '../ts/game';
-  import type { GameService, States, words } from '../ts/types';
-  import { getScores, loadSettings, saveScore } from '../ts/utils';
+  import type { GameService, States } from '../ts/types';
   import { onMount } from 'svelte';
-  import { settings } from '../ts/store';
+  import settings from '../store/settings';
+  import { loadSettings } from '../services/settings';
+  import { getScores, saveScore } from '../services/score';
+  import type { Words } from '../services/words';
 
-  export let wordsList: words;
+  export let wordsList: Words;
 
   let state: States = 'IDLE';
   let game: Game;
