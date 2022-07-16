@@ -18,7 +18,13 @@
   "settings": {
     "language": "Language",
     "sound-effects": "Sound effects",
-    "theme": "Theme"
+    "theme": {
+      "title": "Theme",
+      "errors": {
+        "color-invalid": "Invalid color",
+        "color-too-bright": "Color is too bright"
+      }
+    }
   },
   "playground": {
     "score": "Score: {score}"

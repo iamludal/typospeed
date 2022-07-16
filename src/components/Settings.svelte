@@ -12,7 +12,7 @@
   import { locale, _ } from 'svelte-i18n';
 
   let _settings: Settings = loadSettings();
-  $: errorMessage = getErrorMessage(_settings.colorTheme);
+  $: errorMessageKey = getErrorMessageKey(_settings.colorTheme);
 
   const dispatch = createEventDispatcher();
 
@@ -32,25 +32,25 @@
     }
   };
 
-  const getErrorMessage = (color: string) => {
+  const getErrorMessageKey = (color: string) => {
     if (!COLOR_REGEX.test(color)) {
-      return 'Invalid color';
+      return 'color-invalid';
     } else if (isTooBright(color)) {
-      return 'Color is too bright';
+      return 'color-too-bright';
     }
     return null;
   };
 
   const handleInputChange = () => {
-    if (errorMessage === null) {
+    if (errorMessageKey === null) {
       setColor(_settings.colorTheme);
     }
   };
 
   // handle select change event
-  const handleLanguageChange = (newLanguage: string) => {
-    settings.update(oldSettings => ({ ...oldSettings, language: newLanguage }));
-    locale.set(newLanguage);
+  const handleLanguageChange = () => {
+    settings.update(oldSettings => ({ ...oldSettings, language: _settings.language }));
+    locale.set(_settings.language);
   };
 
   onMount(() => {
@@ -68,15 +68,21 @@
       <IconButton on:click={close} icon={IoMdClose} />
     </div>
 
+    <!-- Language -->
     <div class="section">
       <span class="section__title">{$_('settings.language')}</span>
-      <select class="section__content" bind:value={_settings.language}>
+      <select
+        class="section__content"
+        bind:value={_settings.language}
+        on:change={handleLanguageChange}
+      >
         {#each Object.entries(LANGS) as [key, value]}
-          <option value={key} on:click={() => handleLanguageChange(key)}>{value}</option>
+          <option value={key}>{value}</option>
         {/each}
       </select>
     </div>
 
+    <!-- Sounds -->
     <div class="section">
       <span class="section__title">{$_('settings.sound-effects')}</span>
       <label class="switch section__content">
@@ -85,22 +91,23 @@
       </label>
     </div>
 
+    <!-- Color -->
     <div class="section">
-      <span class="section__title">{$_('settings.theme')}</span>
+      <span class="section__title">{$_('settings.theme.title')}</span>
       <div class="colors section__content">
         <div class="input-container">
           <input
             type="text"
             class="color-input"
             placeholder="#353535"
-            class:color-input--invalid={errorMessage !== null}
+            class:color-input--invalid={errorMessageKey !== null}
             bind:value={_settings.colorTheme}
             on:input={handleInputChange}
           />
-          {#if errorMessage !== null}
+          {#if errorMessageKey !== null}
             <div class="input-error">
               <Icon icon={MdDoNotDisturb} />
-              {errorMessage}
+              {$_(`settings.theme.errors.${errorMessageKey}`)}
             </div>
           {/if}
         </div>
