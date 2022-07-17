@@ -13,7 +13,7 @@
     width: 64px;
     height: 64px;
     border: 7px solid;
-    border-color: white transparent white transparent;
+    border-color: var(--color-secondary) transparent var(--color-secondary) transparent;
     border-radius: var(--radius-high);
     pointer-events: none;
     animation: spin 1s forwards infinite linear;

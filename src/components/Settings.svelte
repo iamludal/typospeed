@@ -3,7 +3,13 @@
   import { fade } from 'svelte/transition';
   import IoMdClose from 'svelte-icons/io/IoMdClose.svelte';
   import IconButton from './shared/IconButton.svelte';
-  import { defaultColors, LANGS } from '../ts/constants';
+  import {
+    colorSecondary,
+    COLOR_HEX_REGEX,
+    defaultColors,
+    LANGS,
+    MIN_CONTRAST,
+  } from '../ts/constants';
   import settings, { Settings } from '../store/settings';
   import Icon from './shared/Icon.svelte';
   import IoMdCheckmark from 'svelte-icons/io/IoMdCheckmark.svelte';
@@ -15,6 +21,8 @@
   let localSettings: Settings = loadSettings();
 
   let colorInput = localSettings.colorTheme.hex();
+  let colorErrorMessageKey: string | null;
+
   $: colorErrorMessageKey = getColorErrorMessageKey(colorInput);
 
   const dispatch = createEventDispatcher();
@@ -28,15 +36,13 @@
   };
 
   const getColorErrorMessageKey = (colorStr: string) => {
-    let color: Color;
-
-    try {
-      color = Color(colorStr);
-    } catch {
+    if (!colorStr.match(COLOR_HEX_REGEX)) {
       return 'color-invalid';
     }
 
-    if (color.contrast(Color('#fff')) < 1.5) {
+    const color = Color(colorStr);
+
+    if (color.contrast(colorSecondary) < MIN_CONTRAST) {
       return 'color-too-bright';
     }
 
@@ -46,12 +52,11 @@
   const handleColorInputChange = () => {
     if (colorErrorMessageKey !== null) return;
 
-    updateColorTheme(localSettings.colorTheme);
+    updateColorTheme(Color(colorInput));
   };
 
   const updateColorTheme = (color: Color) => {
     setColorTheme(color);
-    console.log(color.hex());
     colorInput = color.hex();
   };
 
@@ -123,11 +128,11 @@
         </div>
         {#each defaultColors as color}
           <div
-            class={`color ${localSettings.colorTheme === color ? 'color-active' : ''}`}
+            class={`color ${color.hex() === colorInput ? 'color-active' : ''}`}
             style={`--color: ${color}`}
             on:click={() => updateColorTheme(color)}
           >
-            {#if localSettings.colorTheme === color}
+            {#if color.hex() === colorInput}
               <Icon icon={IoMdCheckmark} />
             {/if}
           </div>
